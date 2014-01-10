@@ -1,0 +1,65 @@
+package mods.scourgecraft.tileentity;
+
+public class TileEntityGoldStorage extends TileEntityScourgeResource
+{	
+	public static final int BUILD_TIME = 1000;
+	
+	public TileEntityGoldStorage()
+	{
+		super(BUILD_TIME);
+	}
+	
+	@Override
+	public double getMaxStorage(int par1Level)
+	{
+		switch (par1Level)
+		{
+			case 1:
+				return 100.00;
+			case 2:
+				return 200.00;
+		}
+		
+		return 0.00;
+	}
+	
+	@Override
+	public double getRate(int par1Level)
+	{		
+		return 0.00;
+	}
+	
+	@Override
+	public boolean hasNextLevel()
+	{ 
+		return  getMaxStorage(level + 1) != 0.00;
+	}
+	
+	public static int getTotalMaxByTownLevel(int par1Level)
+	{
+		switch (par1Level)
+		{
+			case 1:
+				return 1;
+			case 2:
+				return 1;
+		}
+		
+		return 0;
+	}
+	
+	public int storeGold(int amount)
+	{
+		if (amount <= getMaxStorage() - getGold())
+		{
+			this.goldCount += amount;
+			return 0;
+		}
+		else
+		{
+			int leftOver = (int)(getMaxStorage() - getGold()) - amount;
+			this.goldCount = getMaxStorage();
+			return leftOver;
+		}
+	}
+}

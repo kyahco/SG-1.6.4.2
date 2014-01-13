@@ -3,26 +3,23 @@ package mods.scourgecraft.data;
 import java.util.HashMap;
 import java.util.List;
 
+import mods.scourgecraft.Home;
+import mods.scourgecraft.Raid;
 import mods.scourgecraft.ScourgeCraftCore;
+import mods.scourgecraft.network.packet.Packet1HomeInfo;
+import mods.scourgecraft.network.packet.Packet6RaidInfo;
+import mods.scourgecraft.player.ExtendedPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 
 public class RaidManager 
 {
 	public HashMap<String, Raid> raidList = new HashMap<String, Raid>();
 	public List<Raid> endedRaidList = Lists.newArrayList();
-	
-	public class Raid
-	{
-		public EntityPlayer attacker;
-		public EntityPlayer defender;
-		public int timeLeft;
-		public short roundType;
-		private boolean isEnded = false;
-		
-		//RoundType : 1 - Warmup 2 - Balance 3 - War 4 - End
-	}
 	
 	public RaidManager()
 	{
@@ -37,7 +34,16 @@ public class RaidManager
 		r.roundType = 1;
 		r.timeLeft = setTimeLeft(r.roundType);
 		raidList.put(par1PlayerAttacker.username, r);
+		r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "warmup", 2.0f, 2.0f);
 		return r;
+	}
+	
+	public void playerLogin(EntityPlayer player)
+	{
+		for (Raid h : raidList.values())
+		{
+			PacketDispatcher.sendPacketToPlayer(new Packet6RaidInfo(h).makePacket(), (Player)player);;
+		}
 	}
 	
 	public void tick()
@@ -56,6 +62,10 @@ public class RaidManager
 		}
 		for (Raid r : endedRaidList)
 		{
+			ExtendedPlayer extPlayer = ExtendedPlayer.getExtendedPlayer(r.attacker);
+			extPlayer.myRaid = null;
+			extPlayer = ExtendedPlayer.getExtendedPlayer(r.defender);
+			extPlayer.myRaid = null;
 			raidList.remove(r.attacker);
 		}
 		endedRaidList.clear();
@@ -68,11 +78,11 @@ public class RaidManager
 			case 1:
 				return 250;
 			case 2:
-				return 2000;
+				return 250;
 			case 3:
-				return 1000;
+				return 250;
 			case 4:
-				return 1000;
+				return 250;
 		}
 		return 0;
 	}
@@ -84,19 +94,21 @@ public class RaidManager
 			case 1:
 			{
 				r.roundType = 2;
-				r.attacker.worldObj.playSoundEffect((double)((float)r.attacker.posX + 0.5F), (double)((float)r.attacker.posY + 0.5F), (double)((float)r.attacker.posZ + 0.5F), ScourgeCraftCore.modid.toLowerCase() + ":" + "balance", 2.0f, 2.0f);
+				r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "balance", 2.0f, 2.0f);
 				r.timeLeft = setTimeLeft(r.roundType);
 				break;
 			}
 			case 2:
 			{
 				r.roundType = 3;
+				r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "warcry", 2.0f, 2.0f);
 				r.timeLeft = setTimeLeft(r.roundType);
 				break;
 			}
 			case 3:
 			{
 				r.roundType = 4;
+				r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "warend", 2.0f, 2.0f);
 				r.timeLeft = setTimeLeft(r.roundType);
 			}
 			case 4:
@@ -105,6 +117,43 @@ public class RaidManager
 				break;
 			}
 		}
+	}
+
+	public boolean canRaid(EntityPlayer player, EntityPlayer defend) {
+		ExtendedPlayer extPlayer = ExtendedPlayer.getExtendedPlayer(player);
+		if (extPlayer != null)
+		{
+			if (player.username.equals(defend.username))
+			{
+				player.addChatMessage("[ScourgeCraft] You cannot raid yourself.");
+				return false;
+			}
+			if (extPlayer.myHome == null)
+			{
+				player.addChatMessage("[ScourgeCraft] You cannot raid without a home yourself.");
+				return false;
+			}
+			if (extPlayer.myRaid != null)
+			{
+				player.addChatMessage("[ScourgeCraft] You already have a raid started.");
+				return false;
+			}
+		}
+		extPlayer = ExtendedPlayer.getExtendedPlayer(defend);
+		if (extPlayer != null)
+		{
+			if (extPlayer.myHome == null)
+			{
+				player.addChatMessage("[ScourgeCraft] You cannot raid " + defend.username + " as he does not have a home.");
+				return false;
+			}
+			if (extPlayer.myRaid != null)
+			{
+				player.addChatMessage("[ScourgeCraft] " + defend.username + " is already in a raid.");
+				return false;
+			}
+		}
+		return true;
 	}
 	
 }

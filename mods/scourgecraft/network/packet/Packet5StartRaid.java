@@ -8,8 +8,10 @@ import net.minecraft.world.WorldServer;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import mods.scourgecraft.Home;
+import mods.scourgecraft.Raid;
 import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.data.PermissionManager;
@@ -48,9 +50,19 @@ public class Packet5StartRaid extends ScourgePacket {
             	for (WorldServer ws : MinecraftServer.getServer().worldServers)
             	{
             		defend = ws.getPlayerEntityByName(defender);
+            		if (defend != null)
+            			break;
             	}
-            	if (defender != null)
-            		ScourgeCraftCore.raidManager.startRaid(player, defend);
+            	if (defend != null)
+            	{
+            		if (ScourgeCraftCore.raidManager.canRaid(player, defend))
+            		{
+                		Raid r = ScourgeCraftCore.raidManager.startRaid(player, defend);
+                		PacketDispatcher.sendPacketToAllPlayers(new Packet6RaidInfo(r).makePacket());
+            		}
+            	}
+            	else
+            		player.addChatMessage("[ScourgeCraft] Player " + defender + " must be online to start a raid");
             } 
     }
 }

@@ -25,6 +25,8 @@ public class BlockHomeHall extends BlockContainer {
 	
 	public BlockHomeHall(int par1) {
         super(par1, Material.iron);
+        
+        setHardness(50.0F); 
 	}
 
 	/**
@@ -34,7 +36,7 @@ public class BlockHomeHall extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister)
 	{
-		this.blockIcon = par1IconRegister.registerIcon(ScourgeCraftCore.modid + ":" + "homeHall");
+		this.blockIcon = par1IconRegister.registerIcon(ScourgeCraftCore.modid + ":" + "hometable1s");
 	}
 	
 	@Override
@@ -73,6 +75,23 @@ public class BlockHomeHall extends BlockContainer {
 	    }
 	}
 	
+	//You don't want the normal render type, or it wont render properly.
+    @Override
+    public int getRenderType() 
+    {
+            return -1;
+    }
+    
+    //It's not an opaque cube, so you need this.
+    @Override
+    public boolean isOpaqueCube() {
+            return false;
+    }
+   
+    //It's not a normal block, so you need this too.
+    public boolean renderAsNormalBlock() {
+            return false;
+    }
 	
 	@Override
 	public int quantityDropped(Random par1Random)

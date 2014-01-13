@@ -5,6 +5,7 @@ import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.network.packet.Packet2CreateHome;
 import mods.scourgecraft.network.packet.Packet4CollectResource;
+import mods.scourgecraft.network.packet.Packet7UpgradeResource;
 import mods.scourgecraft.player.ExtendedPlayer;
 import mods.scourgecraft.tileentity.TileEntityGoldProducer;
 import mods.scourgecraft.tileentity.TileEntityHomeHall;
@@ -61,7 +62,7 @@ public class GuiGoldProducer extends GuiScreen {
 				drawString(this.fontRenderer, "Max Storage : " + (int)teGold.getMaxStorage(teGold.getLevel() + 1), 10, 120, 0x66CC66);
 				drawString(this.fontRenderer, "Rate per/tick : " + teGold.getRate(teGold.getLevel() + 1), 10, 130, 0x66CC66);
 				drawString(this.fontRenderer, "Upgrade Requirements", 10, 150, 0xFFCC00);
-				this.buttonList.add(new GuiButton(1, this.width - 124, 60, 115, 20, "Upgrade Level 2"));
+				this.buttonList.add(new GuiButton(1, this.width - 124, 60, 115, 20, "Upgrade Level " + (teGold.getLevel() + 1)));
 			}
 			
 		}
@@ -89,7 +90,14 @@ public class GuiGoldProducer extends GuiScreen {
 		}
 		else if (button.id == 1) // Attempting to Upgrade
 		{
+			HomeManager.distributeResource(mc.thePlayer, teGold);
+			PacketDispatcher.sendPacketToServer(new Packet4CollectResource(teGold).makePacket());
 			
+			if (teGold.upgrade())
+			{
+				PacketDispatcher.sendPacketToServer(new Packet7UpgradeResource(teGold).makePacket());
+				Minecraft.getMinecraft().thePlayer.openGui(ScourgeCraftCore.instance, 1, teGold.worldObj, xCoord, yCoord, zCoord);
+			}
 		}
 		else if (button.id == 10)
 		{

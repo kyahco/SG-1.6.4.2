@@ -3,7 +3,7 @@ package mods.scourgecraft.player;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import mods.scourgecraft.Home;
-import mods.scourgecraft.data.RaidManager.Raid;
+import mods.scourgecraft.Raid;
 import mods.scourgecraft.network.packet.Packet3ExtendedInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

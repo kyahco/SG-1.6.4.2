@@ -50,16 +50,16 @@ public class TileEntityGoldStorage extends TileEntityScourgeResource
 	
 	public int storeGold(int amount)
 	{
-		if (amount <= getMaxStorage() - getGold())
+		if (amount + getGold() >= getMaxStorage())
 		{
-			this.goldCount += amount;
-			return 0;
+			int amountLeft = (int)getMaxStorage() - getGold();
+			amountLeft = amount - amountLeft;
+			return amountLeft;
 		}
 		else
 		{
-			int leftOver = (int)(getMaxStorage() - getGold()) - amount;
-			this.goldCount = getMaxStorage();
-			return leftOver;
+			setGold(amount + getGold());
+			return 0;
 		}
 	}
 }

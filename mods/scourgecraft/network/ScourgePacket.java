@@ -7,6 +7,8 @@ import mods.scourgecraft.network.packet.Packet2CreateHome;
 import mods.scourgecraft.network.packet.Packet3ExtendedInfo;
 import mods.scourgecraft.network.packet.Packet4CollectResource;
 import mods.scourgecraft.network.packet.Packet5StartRaid;
+import mods.scourgecraft.network.packet.Packet6RaidInfo;
+import mods.scourgecraft.network.packet.Packet7UpgradeResource;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 
@@ -33,6 +35,8 @@ public abstract class ScourgePacket {
             builder.put(Integer.valueOf(3), Packet3ExtendedInfo.class);
             builder.put(Integer.valueOf(4), Packet4CollectResource.class);
             builder.put(Integer.valueOf(5), Packet5StartRaid.class);
+            builder.put(Integer.valueOf(6), Packet6RaidInfo.class);
+            builder.put(Integer.valueOf(7), Packet7UpgradeResource.class);
             // we add all our packets here later
            
             idMap = builder.build();

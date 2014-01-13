@@ -14,6 +14,7 @@ import mods.scourgecraft.tileentity.TileEntityHomeHall;
 import mods.scourgecraft.tileentity.TileEntityScourgeBuilding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -50,17 +51,19 @@ public class PermissionEventListener
 
 	      if (cancelEvent)
 	      {
-	        if (event.isCancelable())
-	        {
-	        	if (event.entityPlayer.worldObj.isRemote)
+	        if (!event.entityPlayer.worldObj.isRemote) // For some reason the client will not call this, only the server does.
 	        		event.entityPlayer.addChatMessage(cancelMessage);
 	          event.setCanceled(true);
-	        }
 	      }
 	    }
 	    
 	    if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
 	    {
+	    	if (event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) == ScourgeCraftCore.configBlocks.homeHallID)
+		      {
+		    	  return;
+		      }
+	    	
 		   if (!PermissionManager.canRightClickBlock(event.entityPlayer.username, event.x, event.y, event.z))
 		   {
 			   cancelEvent = true;

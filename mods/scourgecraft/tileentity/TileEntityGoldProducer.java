@@ -43,6 +43,8 @@ public class TileEntityGoldProducer extends TileEntityScourgeResource
 				return 0.001;
 			case 2:
 				return 0.002;
+			case 3:
+				return 0.004;
 		}
 		
 		return 0.00;
@@ -57,6 +59,8 @@ public class TileEntityGoldProducer extends TileEntityScourgeResource
 				return 100.00;
 			case 2:
 				return 200.00;
+			case 3: 
+				return 500.00;
 		}
 		
 		return 0.00;
@@ -65,7 +69,20 @@ public class TileEntityGoldProducer extends TileEntityScourgeResource
 	@Override
 	public boolean hasNextLevel()
 	{ 
-		return getRate(level + 1) != 0.00 && getMaxStorage(level + 1) != 0.00;
+		return getRate(level + 1) != 0.00 && getMaxStorage(level + 1) != 0.00 && upgradeTime(level + 1) != 0;
+	}
+	
+	@Override
+	public int upgradeTime(int level)
+	{
+		switch(level)
+		{
+			case 2:
+				return 3000;
+			case 3:
+				return 10000;
+		}
+		return 0; //We should never hit this.
 	}
 
 	public static int getTotalMaxByTownLevel(int par1Level)

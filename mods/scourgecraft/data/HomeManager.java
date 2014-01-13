@@ -72,6 +72,8 @@ public class HomeManager {
 	{
 		for (Home h : PermissionManager.homeList.values())
 		{
+			if (h.ownerUsername.equals(player.username))
+				ExtendedPlayer.getExtendedPlayer(player).myHome = h;
 			PacketDispatcher.sendPacketToPlayer(new Packet1HomeInfo(h).makePacket(), (Player)player);;
 		}
 			
@@ -138,8 +140,11 @@ public class HomeManager {
 				for (int i = 0; i < list.size() && resource.getGold() > 0; i++)
 				{
 					TileEntityGoldStorage teGold = (TileEntityGoldStorage)list.get(i);
-					resource.setGold(teGold.storeGold(resource.getGold()));
-					teGold.worldObj.playSoundEffect((double)((float)teGold.xCoord + 0.5F), (double)((float)teGold.yCoord + 0.5F), (double)((float)teGold.zCoord + 0.5F), ScourgeCraftCore.modid.toLowerCase() + ":" + "goldcollect", 2.0f, 2.0f);
+					if (teGold.isCompleted()) // Only storages that are complete can be stored in.
+					{
+						resource.setGold(teGold.storeGold(resource.getGold()));
+						teGold.worldObj.playSoundEffect((double)((float)teGold.xCoord + 0.5F), (double)((float)teGold.yCoord + 0.5F), (double)((float)teGold.zCoord + 0.5F), ScourgeCraftCore.modid.toLowerCase() + ":" + "goldcollect", 2.0f, 2.0f);
+					}
 				}
 			}
 		}

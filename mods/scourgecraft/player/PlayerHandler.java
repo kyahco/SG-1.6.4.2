@@ -11,6 +11,7 @@ public class PlayerHandler implements IPlayerTracker
         public void onPlayerLogin(EntityPlayer player)
         { //Ran by Server only.  Not on client.
         	HomeManager.playerLogin(player);
+        	ScourgeCraftCore.instance.raidManager.playerLogin(player);
         	ExtendedPlayer.playerLogin(player);
         }
 

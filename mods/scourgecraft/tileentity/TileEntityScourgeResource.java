@@ -46,11 +46,6 @@ public class TileEntityScourgeResource extends TileEntityScourgeBuilding {
 		return 0.00;
 	}
 	
-	public boolean hasNextLevel()
-	{ 
-		return false;
-	}
-	
 	public double getRate()
 	{
 		return getRate(level);

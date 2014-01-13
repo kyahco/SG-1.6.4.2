@@ -164,7 +164,6 @@ public class GuiHomeHall extends GuiScreen {
 		}
 		else if (button.id == 3)
 		{
-			ExtendedPlayer.getExtendedPlayer(playerPar1).myRaid = ScourgeCraftCore.raidManager.startRaid(playerPar1, playerPar1);
 			PacketDispatcher.sendPacketToServer(new Packet5StartRaid("Player1", "Player2").makePacket());
 		}
 		else if (button.id == 10)

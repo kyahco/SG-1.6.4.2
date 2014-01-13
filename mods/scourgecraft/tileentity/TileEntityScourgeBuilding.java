@@ -15,28 +15,11 @@ import net.minecraft.world.World;
 
 public class TileEntityScourgeBuilding extends TileEntity 
 {
-	public class BuildingTask
-	{
-		public int xCoord;
-		public int yCoord;
-		public int zCoord;
-		public int blockId;
-		
-		public BuildingTask(int x, int y, int z, int block)
-		{
-			xCoord = x;
-			yCoord = y;
-			zCoord = z;
-			blockId = block;
-		}
-	}
-	
 	public static final String NBT_BUILD_TIME = "BuildTime";
 	public static final String NBT_TIME_LEFT = "TimeLeft";
 	public static final String NBT_OWNER_NAME = "Owner";
 	public static final String NBT_LEVEL = "Level";
 	
-	private List<BuildingTask> buildingTasks = Lists.newArrayList();
 	private String owner;
 	private int buildTime;
 	private int timeLeft;
@@ -55,35 +38,48 @@ public class TileEntityScourgeBuilding extends TileEntity
 	@Override
 	public void updateEntity()
 	{
-		build();
-		if (buildingTasks.size() > 0)
-		{
-			if (timeLeft % delay == 0)
-			{
-				BuildingTask task = buildingTasks.remove(0);
-				worldObj.setBlock(task.xCoord, task.yCoord, task.zCoord, task.blockId);
-			}
-		}
 		if (timeLeft > 0)
 		{
 			timeLeft -= 1;
-			if (timeLeft % 60 == 0)
+			if (timeLeft % 60 == 0 && timeLeft != 0) // We don't want to run at 0, because we want the done sound to play.
 				worldObj.playSoundEffect((double)((float)xCoord + 0.5F), (double)((float)yCoord + 0.5F), (double)((float)zCoord + 0.5F), ScourgeCraftCore.modid.toLowerCase() + ":" + "construction", 2.0f, 2.0f);
+			else if (timeLeft == 0)
+				worldObj.playSoundEffect((double)((float)xCoord + 0.5F), (double)((float)yCoord + 0.5F), (double)((float)zCoord + 0.5F), ScourgeCraftCore.modid.toLowerCase() + ":" + "constructiondone", 2.0f, 2.0f);
 		}
 		else 
-		{
 			timeLeft = 0;
-			for (BuildingTask t : buildingTasks)
+	}
+	
+	public boolean upgrade()
+	{
+		if (hasNextLevel())
+		{
+			//Consume Stuff here
 			{
-				worldObj.setBlock(t.xCoord, t.yCoord, t.zCoord, t.blockId);
+				buildTime =  upgradeTime(level + 1);
+				timeLeft = upgradeTime(level + 1);
+				level += 1;
+				if (this instanceof TileEntityScourgeResource)
+					((TileEntityScourgeResource)this).setGold(0);
+				return true;
 			}
-			buildingTasks.clear();
 		}
+		return false;
+	}
+	
+	public boolean hasNextLevel()
+	{ 
+		return false;
 	}
 	
 	public boolean isCompleted()
 	{
 		return timeLeft == 0;
+	}
+	
+	public int upgradeTime(int level)
+	{
+		return 0;
 	}
 	
 	public int percentCompleted()
@@ -128,20 +124,6 @@ public class TileEntityScourgeBuilding extends TileEntity
 	}
 	
 	@Override
-	public boolean canUpdate()
-	{
-		if (isCompleted()) // No reason to update this TE if the storage is maxed.
-			return false;
-		return true;
-	}
-	
-	protected void addBuildingTask(BuildingTask task)
-	{
-		buildingTasks.add(task);
-	}
-	
-	
-	@Override
 	public Packet getDescriptionPacket()
 	{
 		NBTTagCompound tileTag = new NBTTagCompound();
@@ -153,14 +135,5 @@ public class TileEntityScourgeBuilding extends TileEntity
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
 	{
 		this.readFromNBT(pkt.data);
-	}
-	
-	public void build()
-	{
-		if (isCompleted())
-			buildingTasks.clear();
-		
-		if (buildingTasks.size() > 0)
-			delay = buildTime / buildingTasks.size();
 	}
 }

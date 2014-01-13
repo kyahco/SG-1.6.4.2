@@ -69,7 +69,6 @@ public class PlayerOverlayGUI  implements ITickHandler {
 						gui.drawTexturedModalRect(width / 2 - 100, 2, 64, 0, 32, 32);
 					else if (extPlayer.myRaid.roundType == 4)
 						gui.drawTexturedModalRect(width / 2 - 100, 2, 96, 0, 32, 32);
-					GL11.glPopMatrix();
 					
 					fontRender.drawString("Raid Event :" + extPlayer.myRaid.timeLeft, 3 , height / 2 + 52, color);
 				}

@@ -20,6 +20,7 @@ public class SoundSystem {
                      "warend.ogg",
                      "warmup.ogg",
                      "construction.ogg",
+                     "constructiondone.ogg",
                      "goldcollect.ogg"
                      };
              for (int i = 0; i < soundFiles.length; i++){

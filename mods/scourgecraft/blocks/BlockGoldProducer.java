@@ -17,7 +17,8 @@ public class BlockGoldProducer extends BlockContainer {
 
 	public BlockGoldProducer(int par1, Material par2Material) {
 		super(par1, par2Material);
-		// TODO Auto-generated constructor stub
+		
+		setHardness(50.0F); 
 	}
 
 	@Override

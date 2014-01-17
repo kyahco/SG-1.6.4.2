@@ -1,5 +1,7 @@
 package mods.scourgecraft.blocks;
 
+import java.util.Random;
+
 import mods.scourgecraft.Home;
 import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.data.PermissionManager;
@@ -11,6 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class BlockGoldProducer extends BlockContainer {
@@ -78,5 +81,40 @@ public class BlockGoldProducer extends BlockContainer {
 	        return true;
 	    }
 	}
+	
+	//You don't want the normal render type, or it wont render properly.
+    @Override
+    public int getRenderType() 
+    {
+            return -1;
+    }
+    
+    //It's not an opaque cube, so you need this.
+    @Override
+    public boolean isOpaqueCube() {
+            return false;
+    }
+   
+    //It's not a normal block, so you need this too.
+    public boolean renderAsNormalBlock() {
+            return false;
+    }
+	
+	@Override
+	public int quantityDropped(Random par1Random)
+    {
+        return 0;
+    }
+	
+	@Override
+	public boolean canDropFromExplosion(Explosion par1Explosion)
+	{
+		return false;
+	}
+	
+	public int getMobilityFlag()
+    {
+		return 2; //Do not allow to be moved by Pistons or such.
+    }
 
 }

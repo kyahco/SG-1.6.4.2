@@ -6,6 +6,7 @@ import java.io.IOException;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import mods.scourgecraft.ScourgeCraftCore;
+import mods.scourgecraft.blocks.BlockCannon;
 import mods.scourgecraft.blocks.BlockGoldProducer;
 import mods.scourgecraft.blocks.BlockGoldStorage;
 import mods.scourgecraft.blocks.BlockHomeHall;
@@ -20,6 +21,8 @@ public class ConfigBlocks {
 	public static Block goldProducer;
 	public static int goldStorageID;
 	public static Block goldStorage;
+	public static int cannonID;
+	public static Block cannon;
 	
 	public void initConfig()
     {
@@ -40,6 +43,7 @@ public class ConfigBlocks {
 		homeHallID = config.get("Blocks", "Home Hall", 500).getInt();
 		goldProducerID = config.get("Blocks", "Gold Producer", 501).getInt();
 		goldStorageID = config.get("Blocks", "Gold Storage", 502).getInt();
+		cannonID = config.get("Attack Blocks", "Defense Cannon", 503).getInt();
 		
         config.save();
     }
@@ -49,6 +53,7 @@ public class ConfigBlocks {
 		homeHall = (new BlockHomeHall(homeHallID)).setCreativeTab(ScourgeCraftCore.tabBlocks).setUnlocalizedName("homeHall");
 		goldProducer = (new BlockGoldProducer(goldProducerID, Material.iron)).setCreativeTab(ScourgeCraftCore.tabBlocks).setUnlocalizedName("goldProducer");
 		goldStorage = (new BlockGoldStorage(goldStorageID, Material.iron)).setCreativeTab(ScourgeCraftCore.tabBlocks).setUnlocalizedName("goldStorage");
+		cannon = (new BlockCannon(cannonID, Material.iron)).setCreativeTab(ScourgeCraftCore.tabBlocks).setUnlocalizedName("cannon");
     }
 	
 	public void register()
@@ -56,6 +61,7 @@ public class ConfigBlocks {
 		GameRegistry.registerBlock(homeHall, ScourgeCraftCore.modid + "homeHall");
 		GameRegistry.registerBlock(goldProducer, ScourgeCraftCore.modid + "goldProducer");
 		GameRegistry.registerBlock(goldStorage, ScourgeCraftCore.modid + "goldStorage");
+		GameRegistry.registerBlock(cannon, ScourgeCraftCore.modid + "cannon");
     }
 	
 	public void languageRegister()
@@ -65,5 +71,6 @@ public class ConfigBlocks {
 		LanguageRegistry.addName(homeHall, "Home Hall");
 		LanguageRegistry.addName(goldProducer, "Gold Producer");
 		LanguageRegistry.addName(goldStorage, "Gold Storage");
+		LanguageRegistry.addName(cannon, "Defense Cannon");
 	}
 }

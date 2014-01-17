@@ -3,20 +3,20 @@ package mods.scourgecraft.tileentity.render;
 import org.lwjgl.opengl.GL11;
 
 import mods.scourgecraft.ScourgeCraftCore;
-import mods.scourgecraft.tileentity.TileEntityGoldProducer;
+import mods.scourgecraft.tileentity.TileEntityGoldStorage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 
-public class ModelGoldProducer extends TileEntitySpecialRenderer
+public class ModelGoldStorage extends TileEntitySpecialRenderer
 {
 	private IModelCustom myModelLevel1;
 	
-	public ModelGoldProducer()
+	public ModelGoldStorage()
 	{
-		myModelLevel1 = AdvancedModelLoader.loadModel("/assets/scourgecraft/textures/model/goldproducer.obj");
+		myModelLevel1 = AdvancedModelLoader.loadModel("/assets/scourgecraft/textures/model/goldstorage.obj");
 	}
 	
 	@Override
@@ -24,14 +24,14 @@ public class ModelGoldProducer extends TileEntitySpecialRenderer
 			double z, float f) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
-        if (tileentity instanceof TileEntityGoldProducer)
+        if (tileentity instanceof TileEntityGoldStorage)
         {
-        	TileEntityGoldProducer teHome = (TileEntityGoldProducer)tileentity;
+        	TileEntityGoldStorage teHome = (TileEntityGoldStorage)tileentity;
         	switch (teHome.getLevel())
         	{
         		case 1:
         		{
-                    Minecraft.getMinecraft().renderEngine.bindTexture(ModelResourceFile.goldProducer1);
+                    Minecraft.getMinecraft().renderEngine.bindTexture(ModelResourceFile.goldStorage1);
                     myModelLevel1.renderAll();
         			break;
         		}

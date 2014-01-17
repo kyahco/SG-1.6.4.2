@@ -64,7 +64,6 @@ public class ScourgeCraftCore
     {
     	tabBlocks = new CreativeTabBlock("SG : Blocks");
 
-		playerEventListener = new PlayerEventListener();
     	configBlocks = new ConfigBlocks();
     	
     	if(FMLCommonHandler.instance().getSide().isClient())
@@ -82,18 +81,16 @@ public class ScourgeCraftCore
     	configBlocks.register();
     	configBlocks.languageRegister();
     	
-    	GameRegistry.registerTileEntity(TileEntityScourgeBuilding.class, modid + "SCTileEntity");
-    	GameRegistry.registerTileEntity(TileEntityHomeHall.class, modid + "TEHomeHall");
-    	GameRegistry.registerTileEntity(TileEntityGoldProducer.class, modid + "TEGoldProducer");
-    	GameRegistry.registerTileEntity(TileEntityGoldStorage.class, modid + "TEGoldStorage");
-    	
     	new GuiHandler();
     	
     	proxy.registerHandlers();
     	
     	permissionEventListener = new PermissionEventListener();
+		playerEventListener = new PlayerEventListener();
+		
     	MinecraftForge.EVENT_BUS.register(permissionEventListener);
     	MinecraftForge.EVENT_BUS.register(playerEventListener);
+    	
     	GameRegistry.registerWorldGenerator(new GenerateHome());
 
     }

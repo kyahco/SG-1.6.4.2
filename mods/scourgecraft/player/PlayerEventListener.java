@@ -11,7 +11,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 public class PlayerEventListener {
-
+	public static int VIT_FOR_PLAYER_KILL = 3;
 	@ForgeSubscribe
     public void livingDies(LivingDeathEvent event)
     {
@@ -20,6 +20,13 @@ public class PlayerEventListener {
 	@ForgeSubscribe
 	public void onEntityLivingDeath(LivingDeathEvent event)
 	{
+		if (event.source.getEntity() instanceof EntityPlayer && event.entity instanceof EntityPlayer)
+		{
+			ExtendedPlayer extAttacker = ExtendedPlayer.getExtendedPlayer((EntityPlayer)event.source.getEntity());
+			
+			extAttacker.addVitality(VIT_FOR_PLAYER_KILL);
+			((EntityPlayer)event.source.getEntity()).addChatMessage("You have recieved " + VIT_FOR_PLAYER_KILL + " Vitality Points for killing " + ((EntityPlayer)event.entity).username);
+		}
 	}
 	
 	@ForgeSubscribe

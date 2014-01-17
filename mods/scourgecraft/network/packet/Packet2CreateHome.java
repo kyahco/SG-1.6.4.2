@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import mods.scourgecraft.Home;
 import mods.scourgecraft.ScourgeCraftCore;
@@ -62,6 +63,7 @@ public class Packet2CreateHome extends ScourgePacket {
                     	teHome.setOwner(home.ownerUsername);
                     	player.worldObj.markBlockForUpdate(home.xCoord, home.yCoord, home.zCoord);
                     	teHome.build();
+                    	PacketDispatcher.sendPacketToAllPlayers(new Packet1HomeInfo(home).makePacket());
                     }
                     else
                     	System.out.println("[ScourgeCraft] The coords of a Home Creation have Invalid TE : " + home.xCoord + " " + home.yCoord + " " + home.zCoord);

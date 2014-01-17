@@ -4,6 +4,7 @@ import java.util.Random;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import mods.scourgecraft.ScourgeCraftCore;
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -22,7 +23,11 @@ public class GenerateHome implements IWorldGenerator
 	        int randPosY = random.nextInt(128);
 	        int randPosZ = j + random.nextInt(16);
 	        
-	        if (world.canBlockSeeTheSky(randPosX, randPosY, randPosZ) && !world.isAirBlock(randPosX, randPosY - 1, randPosZ))
+	        if (world.canBlockSeeTheSky(randPosX, randPosY, randPosZ) && 
+	        		(world.getBlockId(randPosX, randPosY - 1, randPosZ) == Block.sand.blockID ||
+	        		world.getBlockId(randPosX, randPosY - 1, randPosZ) == Block.grass.blockID ||
+	        		world.getBlockId(randPosX, randPosY - 1, randPosZ) == Block.dirt.blockID || 
+	        		world.getBlockId(randPosX, randPosY - 1, randPosZ) == Block.snow.blockID))
 	        {
 	        	for (int x = randPosX - 25; x < randPosX + 25; x++)
 	        	{

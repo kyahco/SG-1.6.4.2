@@ -43,6 +43,8 @@ public class ExtendedPlayer implements IExtendedEntityProperties
 		vit -= (amount < vit ? amount : vit);
 
 		vitality = vit;
+		
+		update();
 
 		return sufficient;
 	}
@@ -50,6 +52,7 @@ public class ExtendedPlayer implements IExtendedEntityProperties
 	public final void addVitality(int amount)
 	{
 		vitality += amount;
+		update();
 	}
 	
 	public final int getVitality()
@@ -60,6 +63,11 @@ public class ExtendedPlayer implements IExtendedEntityProperties
 	public final void setVitality(int vit)
 	{
 		vitality = vit;
+	}
+	
+	private void update() // Only to be called on Add or Remove, not during gets/sets.
+	{
+		PacketDispatcher.sendPacketToPlayer(new Packet3ExtendedInfo(ExtendedPlayer.getExtendedPlayer(player)).makePacket(), (Player)player);
 	}
 
 	@Override

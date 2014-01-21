@@ -57,8 +57,6 @@ public class ScourgeCraftCore
     public static PermissionEventListener permissionEventListener;
     public static PlayerEventListener playerEventListener;
     
-    public static RaidManager raidManager = new RaidManager();
-    
     @EventHandler
     public void loadConfigurationValues(FMLPreInitializationEvent event)
     {

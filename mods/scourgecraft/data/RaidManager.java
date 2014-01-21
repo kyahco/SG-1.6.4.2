@@ -18,15 +18,15 @@ import cpw.mods.fml.common.network.Player;
 
 public class RaidManager 
 {
-	public HashMap<String, Raid> raidList = new HashMap<String, Raid>();
-	public List<Raid> endedRaidList = Lists.newArrayList();
+	public static HashMap<String, Raid> raidList = new HashMap<String, Raid>();
+	public static List<Raid> endedRaidList = Lists.newArrayList();
 	
 	public RaidManager()
 	{
 		
 	}
 	
-	public Raid startRaid(EntityPlayer par1PlayerAttacker, EntityPlayer par1PlayerDefender)
+	public static Raid startRaid(EntityPlayer par1PlayerAttacker, EntityPlayer par1PlayerDefender)
 	{
 		Raid r = new Raid();
 		r.attacker = par1PlayerAttacker;
@@ -38,15 +38,15 @@ public class RaidManager
 		return r;
 	}
 	
-	public void playerLogin(EntityPlayer player)
+	public static void playerLogin(EntityPlayer player)
 	{
-		for (Raid h : raidList.values())
+		for (Raid h : RaidManager.raidList.values())
 		{
 			PacketDispatcher.sendPacketToPlayer(new Packet6RaidInfo(h).makePacket(), (Player)player);;
 		}
 	}
 	
-	public void tick()
+	public static void tick()
 	{
 		for (Raid r : raidList.values())
 		{
@@ -71,23 +71,23 @@ public class RaidManager
 		endedRaidList.clear();
 	}
 	
-	private int setTimeLeft(short round)
+	private static int setTimeLeft(short round)
 	{
 		switch (round)
 		{
 			case 1:
-				return 250;
+				return 400;
 			case 2:
-				return 250;
+				return 400;
 			case 3:
-				return 250;
+				return 400;
 			case 4:
-				return 250;
+				return 400;
 		}
 		return 0;
 	}
 
-	private void advanceRound(Raid r)
+	private static void advanceRound(Raid r)
 	{
 		switch (r.roundType)
 		{
@@ -119,7 +119,7 @@ public class RaidManager
 		}
 	}
 
-	public boolean canRaid(EntityPlayer player, EntityPlayer defend) {
+	public static boolean canRaid(EntityPlayer player, EntityPlayer defend) {
 		ExtendedPlayer extPlayer = ExtendedPlayer.getExtendedPlayer(player);
 		if (extPlayer != null)
 		{

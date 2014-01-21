@@ -9,7 +9,6 @@ import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.data.PermissionManager;
 import mods.scourgecraft.player.ExtendedPlayer;
 import mods.scourgecraft.tileentity.TileEntityGoldProducer;
-import mods.scourgecraft.tileentity.TileEntityHomeBuilding;
 import mods.scourgecraft.tileentity.TileEntityHomeHall;
 import mods.scourgecraft.tileentity.TileEntityScourgeBuilding;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +26,12 @@ public class PermissionEventListener
 	{
 		String line = event.component.toStringWithFormatting(true);
 
+		if (line.contains(".home"))
+		{
+			ExtendedPlayer extPlayer = ExtendedPlayer.getExtendedPlayer(event.player);
+			if (extPlayer != null && extPlayer.myHome != null)
+				event.player.setPositionAndUpdate(extPlayer.myHome.xCoord, extPlayer.myHome.yCoord + 1, extPlayer.myHome.zCoord);
+		}
 	}
 	
 	 @ForgeSubscribe

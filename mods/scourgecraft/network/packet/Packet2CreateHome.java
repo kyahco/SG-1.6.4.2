@@ -51,7 +51,7 @@ public class Packet2CreateHome extends ScourgePacket {
     @Override
     protected void execute(EntityPlayer player, Side side) {
             if (side.isServer()) {
-            	if (!PermissionManager.homeList.containsKey(home.ownerUsername)) //Ensure player doesn't already have home.  Hack?
+            	if (!HomeManager.homeList.containsKey(home.ownerUsername)) //Ensure player doesn't already have home.  Hack?
             	{
             		EntityPlayer remotePlayer = player.worldObj.getPlayerEntityByName(home.ownerUsername);
                     TileEntity te = remotePlayer.worldObj.getBlockTileEntity(home.xCoord, home.yCoord, home.zCoord);
@@ -59,10 +59,12 @@ public class Packet2CreateHome extends ScourgePacket {
                     {
                     	HomeManager.createHome(home);
                     	TileEntityHomeHall teHome = (TileEntityHomeHall)te;
-                    	teHome.setName(home.name);
+                    	teHome.setHomeName(home.name);
                     	teHome.setOwner(home.ownerUsername);
                     	player.worldObj.markBlockForUpdate(home.xCoord, home.yCoord, home.zCoord);
                     	teHome.build();
+                    	ExtendedPlayer extPlayer = ExtendedPlayer.getExtendedPlayer(remotePlayer);
+                    	extPlayer.myHome = home;
                     	PacketDispatcher.sendPacketToAllPlayers(new Packet1HomeInfo(home).makePacket());
                     }
                     else

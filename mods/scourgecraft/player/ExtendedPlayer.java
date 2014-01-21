@@ -4,6 +4,10 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import mods.scourgecraft.Home;
 import mods.scourgecraft.Raid;
+import mods.scourgecraft.data.HomeManager;
+import mods.scourgecraft.data.PermissionManager;
+import mods.scourgecraft.network.CommonProxy;
+import mods.scourgecraft.network.packet.Packet1HomeInfo;
 import mods.scourgecraft.network.packet.Packet3ExtendedInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +17,7 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 
 public class ExtendedPlayer implements IExtendedEntityProperties
 {
+	public static final String EXT_PLAYER = "SCExtended";
 	public Home myHome;
 	public Raid myRaid;
 
@@ -30,7 +35,7 @@ public class ExtendedPlayer implements IExtendedEntityProperties
 
 	public static ExtendedPlayer getExtendedPlayer(EntityPlayer player)
 	{
-		return (ExtendedPlayer) player.getExtendedProperties("ExtendedProps");
+		return (ExtendedPlayer) player.getExtendedProperties(EXT_PLAYER);
 	}
 	
 	public final boolean consumeVitality(int amount)
@@ -90,6 +95,28 @@ public class ExtendedPlayer implements IExtendedEntityProperties
 	public static void playerLogin(EntityPlayer player)
 	{
 		PacketDispatcher.sendPacketToPlayer(new Packet3ExtendedInfo(ExtendedPlayer.getExtendedPlayer(player)).makePacket(), (Player)player);
+	}
+	
+
+	public static void saveProxyData(EntityPlayer player) 
+	{
+		ExtendedPlayer playerData = ExtendedPlayer.getExtendedPlayer(player);
+
+		CommonProxy.storeEntityData(player.username, playerData);
+	}
+	
+	public static void loadProxyData(EntityPlayer player) 
+	{
+		ExtendedPlayer savedData = CommonProxy.getEntityData(player.username);
+		
+		if(savedData != null) {
+			player.registerExtendedProperties(ExtendedPlayer.EXT_PLAYER, savedData);
+		}
+	}
+	
+	public static void register(EntityPlayer player)
+	{
+		player.registerExtendedProperties(ExtendedPlayer.EXT_PLAYER, new ExtendedPlayer(player));
 	}
 
 }

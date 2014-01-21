@@ -5,7 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -26,6 +29,8 @@ import net.sourceforge.yamlbeans.YamlWriter;
 
 public class HomeManager {
 
+	public static HashMap<String, Home> homeList = new HashMap<String, Home>();
+	
 	public static void loadHomes()
 	{
 		File file = new File(ScourgeCraftCore.proxy.getMinecraftDir(), "Homes");
@@ -34,7 +39,7 @@ public class HomeManager {
 		for (final File fileEntry : file.listFiles()) {
 			loadHome(fileEntry.getName().replace(".yml", ""));
 	    }
-		System.out.println("Loaded " + PermissionManager.homeList.size() + " home(s)");
+		System.out.println("Loaded " + homeList.size() + " home(s)");
 	}
 	
 	public static void createHome(Home home)
@@ -64,17 +69,21 @@ public class HomeManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            PermissionManager.homeList.put(home.ownerUsername, home);
+            homeList.put(home.ownerUsername, home);
             System.out.println("Created");
 	}
 	
-	public static void playerLogin(EntityPlayer player)
+	public static void playerLogin(EntityPlayer player, boolean sendAllHomes)
 	{
-		for (Home h : PermissionManager.homeList.values())
+		for (Home h : homeList.values())
 		{
 			if (h.ownerUsername.equals(player.username))
+			{
 				ExtendedPlayer.getExtendedPlayer(player).myHome = h;
-			PacketDispatcher.sendPacketToPlayer(new Packet1HomeInfo(h).makePacket(), (Player)player);;
+				PacketDispatcher.sendPacketToPlayer(new Packet1HomeInfo(h).makePacket(), (Player)player);
+			}
+			else if (sendAllHomes)
+				PacketDispatcher.sendPacketToPlayer(new Packet1HomeInfo(h).makePacket(), (Player)player);
 		}
 			
 	}
@@ -111,7 +120,7 @@ public class HomeManager {
         {
             e.printStackTrace();
         }
-        PermissionManager.homeList.put(username, home);
+        homeList.put(username, home);
 	}
 	
 	public static int getHomeSize(int homeLevel)
@@ -128,7 +137,7 @@ public class HomeManager {
 	
 	public static void distributeResource(EntityPlayer par1Player, TileEntityScourgeResource resource)
 	{
-		Home home = PermissionManager.getHomeByPlayerName(par1Player.username);
+		Home home = getHomeByPlayerName(par1Player.username);
 		
 		if (home != null)
 		{
@@ -148,5 +157,49 @@ public class HomeManager {
 				}
 			}
 		}
+	}
+	
+	public static Home getHomeByPlayerName(String username)
+	{
+		for (String h : homeList.keySet())
+		{
+			if (h.equals(username))
+				return homeList.get(h);
+		}
+		return null;
+	}
+	
+	public static boolean IsPointInHome(Home h, int x, int y, int z)
+	{
+		int widthOfHome = HomeManager.getHomeSize(h.level);
+		
+		if (h.xCoord - widthOfHome <= x && h.xCoord + widthOfHome >= x 
+				&& h.yCoord - widthOfHome <= y && h.yCoord + widthOfHome >= y
+				&& h.zCoord - widthOfHome <= z && h.zCoord + widthOfHome >= z )
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public static List<Home> getHomesStartWith(String compared, int maxAmount, int pageNumber)
+	{
+		int control = (maxAmount * pageNumber) + maxAmount;
+		int i = 0;
+		List<Home> toReturn = Lists.newArrayList();
+		for (Home h : homeList.values())
+		{
+			if (h.ownerUsername.toLowerCase().startsWith(compared.toLowerCase()))
+			{ 
+				i++;
+				
+				if (control >= i)
+					toReturn.add(h);
+			}
+
+			if (maxAmount <= toReturn.size())
+				return toReturn;
+		}
+		return toReturn;
 	}
 }

@@ -8,6 +8,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import cpw.mods.fml.relauncher.Side;
 import mods.scourgecraft.Home;
 import mods.scourgecraft.ScourgeCraftCore;
+import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.data.PermissionManager;
 import mods.scourgecraft.network.ClientProxy;
 import mods.scourgecraft.network.ScourgePacket;
@@ -18,6 +19,7 @@ public class Packet1HomeInfo extends ScourgePacket {
 	private Home home;
    
     public Packet1HomeInfo(Home par1Home) {
+
     		this.home = par1Home;
     }
 
@@ -53,7 +55,7 @@ public class Packet1HomeInfo extends ScourgePacket {
                     if (extPlayer != null)
                     	extPlayer.myHome = home;
             	}
-            	PermissionManager.homeList.put(home.ownerUsername, home);
+            	HomeManager.homeList.put(home.ownerUsername, home);
             } 
     }
 }

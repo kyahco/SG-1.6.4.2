@@ -64,7 +64,7 @@ public class Packet6RaidInfo extends ScourgePacket {
             			raid.defender.username.equals(player.username))
             		ExtendedPlayer.getExtendedPlayer(player).myRaid = raid;
             	
-            	ScourgeCraftCore.raidManager.raidList.put(attacker, raid);
+            	RaidManager.raidList.put(attacker, raid);
             } 
     }
 }

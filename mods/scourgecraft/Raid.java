@@ -10,4 +10,7 @@ public class Raid
 	public short roundType;
 	//RoundType : 1 - Warmup 2 - Balance 3 - War 4 - End
 	public boolean isEnded = false;
+	public Home defenderHome;
+	public Home attackerHome;
+	
 }

@@ -86,8 +86,6 @@ public class GuiHomeHall extends GuiScreen {
 				drawString(this.fontRenderer, "Upgrade Requirements", 10, 140, 0xFFCC00);
 				this.buttonList.add(new GuiButton(1, this.width - 124, 60, 115, 20, "Upgrade Level " + (tileHome.getLevel() + 1)));
 			}
-			
-			this.buttonList.add(new GuiButton(3, 195, this.height - 150, 65, 20, "Test Raid"));
 		}
 		else if (OtherPlayerTownHall())
 		{
@@ -171,10 +169,6 @@ public class GuiHomeHall extends GuiScreen {
 				
             	extPlayer.myHome = home;
 			}
-		}
-		else if (button.id == 3)
-		{
-			PacketDispatcher.sendPacketToServer(new Packet5StartRaid("Player1", "Player2").makePacket());
 		}
 		else if (button.id == 10)
 		{

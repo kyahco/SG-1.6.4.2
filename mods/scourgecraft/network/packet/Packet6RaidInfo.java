@@ -12,6 +12,7 @@ import cpw.mods.fml.relauncher.Side;
 import mods.scourgecraft.Home;
 import mods.scourgecraft.Raid;
 import mods.scourgecraft.ScourgeCraftCore;
+import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.data.PermissionManager;
 import mods.scourgecraft.data.RaidManager;
 import mods.scourgecraft.network.ClientProxy;
@@ -60,6 +61,8 @@ public class Packet6RaidInfo extends ScourgePacket {
             		if (raid.defender != null && raid.attacker != null) //We have both values, leave loop.
             			break;
             	}
+            	raid.attackerHome = HomeManager.getHomeByPlayerName(raid.attacker.username);
+            	raid.defenderHome = HomeManager.getHomeByPlayerName(raid.defender.username);
             	if (raid.attacker.username.equals(player.username) || 
             			raid.defender.username.equals(player.username))
             		ExtendedPlayer.getExtendedPlayer(player).myRaid = raid;

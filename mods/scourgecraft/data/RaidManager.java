@@ -31,10 +31,14 @@ public class RaidManager
 		Raid r = new Raid();
 		r.attacker = par1PlayerAttacker;
 		r.defender = par1PlayerDefender;
+		r.attackerHome = HomeManager.getHomeByPlayerName(r.attacker.username);
+		r.defenderHome = HomeManager.getHomeByPlayerName(r.defender.username);
 		r.roundType = 1;
 		r.timeLeft = setTimeLeft(r.roundType);
 		raidList.put(par1PlayerAttacker.username, r);
 		r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "warmup", 2.0f, 2.0f);
+		r.defender.worldObj.playSoundAtEntity(r.defender, ScourgeCraftCore.modid.toLowerCase() + ":" + "warmup", 2.0f, 2.0f);
+
 		return r;
 	}
 	
@@ -95,12 +99,17 @@ public class RaidManager
 			{
 				r.roundType = 2;
 				r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "balance", 2.0f, 2.0f);
+				r.defender.worldObj.playSoundAtEntity(r.defender, ScourgeCraftCore.modid.toLowerCase() + ":" + "balance", 2.0f, 2.0f);
 				r.timeLeft = setTimeLeft(r.roundType);
+				
+				r.attacker.setPosition(r.defenderHome.xCoord + HomeManager.getHomeSize(r.defenderHome.level) + 5, r.defenderHome.yCoord, r.defenderHome.zCoord + HomeManager.getHomeSize(r.defenderHome.level) + 5);
+				r.defender.setPosition(r.defenderHome.xCoord, r.defenderHome.yCoord, r.defenderHome.zCoord);
 				break;
 			}
 			case 2:
 			{
 				r.roundType = 3;
+				r.defender.worldObj.playSoundAtEntity(r.defender, ScourgeCraftCore.modid.toLowerCase() + ":" + "warcry", 2.0f, 2.0f);
 				r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "warcry", 2.0f, 2.0f);
 				r.timeLeft = setTimeLeft(r.roundType);
 				break;
@@ -108,11 +117,15 @@ public class RaidManager
 			case 3:
 			{
 				r.roundType = 4;
+				r.defender.worldObj.playSoundAtEntity(r.defender, ScourgeCraftCore.modid.toLowerCase() + ":" + "warend", 2.0f, 2.0f);
 				r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "warend", 2.0f, 2.0f);
 				r.timeLeft = setTimeLeft(r.roundType);
+				break;
 			}
 			case 4:
 			{
+				r.attacker.setPosition(r.attackerHome.xCoord, r.attackerHome.yCoord + 1, r.attackerHome.zCoord);
+				r.defender.setPosition(r.defenderHome.xCoord, r.defenderHome.yCoord + 1, r.defenderHome.zCoord);
 				r.isEnded = true;
 				break;
 			}

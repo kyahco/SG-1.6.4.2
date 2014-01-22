@@ -7,6 +7,7 @@ import java.util.logging.Level;
 
 import mods.scourgecraft.Home;
 import mods.scourgecraft.data.HomeManager;
+import mods.scourgecraft.network.packet.Packet5StartRaid;
 import mods.scourgecraft.tileentity.TileEntityRaidCenter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -16,6 +17,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 
 
@@ -30,6 +33,7 @@ public class GuiRaidCenter extends GuiScreen
 	private TileEntityRaidCenter tileRaid;
 	private int ticks = 0;
 	List<Home> townList;
+	private int pageNumber = 0;
 	
 	public GuiRaidCenter(EntityPlayer par1EntityPlayer, TileEntityRaidCenter par1Tile, int x, int y, int z) {
 		ePlayer = par1EntityPlayer;
@@ -44,7 +48,7 @@ public class GuiRaidCenter extends GuiScreen
 	{
 		txtRaidName = new GuiTextField(fontRenderer, this.width - 105, this.height - 25, 100, 20);
 		txtRaidName.setMaxStringLength(16);
-		townList = HomeManager.getHomesStartWith(townName, 10, 0);
+		townList = HomeManager.getHomesStartWith(townName, 10, pageNumber);
 	}
 	
 	@Override
@@ -71,7 +75,7 @@ public class GuiRaidCenter extends GuiScreen
 			drawString(this.fontRenderer, townList.get(i).name, 10, (i * 20) + 70, 0xFFCC00);
 			drawString(this.fontRenderer, townList.get(i).ownerUsername, 80, (i * 20) + 70, 0x66CC66);
 			drawString(this.fontRenderer, townList.get(i).level + "", 150, (i * 20) + 70, 0x66CC66);
-			this.buttonList.add(new GuiButton(10, 250, (i * 20) + 70 - 7, 65, 20, "Raid Town"));
+			this.buttonList.add(new GuiButton(20 + i, 250, (i * 20) + 70 - 7, 65, 20, "Raid Town"));
 		}
 		this.buttonList.add(new GuiButton(8, 50, this.height - 25, 45, 20, "< Page"));
 		this.buttonList.add(new GuiButton(9, 100, this.height - 25, 45, 20, "Page >"));
@@ -111,9 +115,31 @@ public class GuiRaidCenter extends GuiScreen
 		{
 			
 		}
+		else if (button.id == 8)
+		{
+			if (pageNumber <= 0)
+				return;
+			else 
+				pageNumber--;
+		}
+		else if (button.id == 9)
+		{
+			pageNumber++;
+		}
 		else if (button.id == 10)
 		{
 			Minecraft.getMinecraft().thePlayer.closeScreen();
+		}
+		else if (button.id >= 20 && button.id <= 30)
+		{
+			if (townList.size() >= button.id - 20)
+			{
+				Home h = townList.get(button.id - 20);
+				if (h != null)
+				{
+					PacketDispatcher.sendPacketToServer(new Packet5StartRaid(ePlayer.username, h.ownerUsername).makePacket());
+				}
+			}
 		}
 	}
 }

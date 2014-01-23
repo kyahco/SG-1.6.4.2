@@ -2,16 +2,22 @@ package mods.scourgecraft.player;
 
 import java.util.HashMap;
 
+import mods.scourgecraft.ScourgeCraftCore;
+import mods.scourgecraft.data.HomeManager;
+import mods.scourgecraft.data.RaidManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 public class PlayerEventListener {
 	public static int VIT_FOR_PLAYER_KILL = 3;
+	
 	@ForgeSubscribe
     public void livingDies(LivingDeathEvent event)
     {
@@ -27,6 +33,14 @@ public class PlayerEventListener {
 			extAttacker.addVitality(VIT_FOR_PLAYER_KILL);
 			((EntityPlayer)event.source.getEntity()).addChatMessage("You have recieved " + VIT_FOR_PLAYER_KILL + " Vitality Points for killing " + ((EntityPlayer)event.entity).username);
 		}
+		
+		if (event.entity instanceof EntityPlayer)
+		{
+			ExtendedPlayer extPlayer = ExtendedPlayer.getExtendedPlayer((EntityPlayer)event.entity);
+			if (extPlayer.myHome == null)
+				((EntityPlayer)event.entity).addChatMessage("Was Null");
+			ExtendedPlayer.saveProxyData((EntityPlayer) event.entity);
+		}
 	}
 	
 	@ForgeSubscribe
@@ -36,8 +50,13 @@ public class PlayerEventListener {
 		DamageSource attackSource = event.source;
 		
 	}
+	
 
-	public void onPlayerRespawn(EntityPlayer player) {
+	@ForgeSubscribe
+	public void onEntityJoinWorld(EntityJoinWorldEvent event)
+	{
+		if (event.entity instanceof EntityPlayer)
+			ExtendedPlayer.loadProxyData((EntityPlayer) event.entity);
 	}
 	
 	@ForgeSubscribe
@@ -45,10 +64,11 @@ public class PlayerEventListener {
 	{
 		if (event.entity instanceof EntityPlayer)
 		{
-			if (event.entity.getExtendedProperties("ExtendedProps") == null) {
+			if (event.entity.getExtendedProperties(ExtendedPlayer.EXT_PLAYER) == null)
+			{
 				System.out.println("[ScourgeCraft] Registering extended properties.");
-				event.entity.registerExtendedProperties("ExtendedProps", new ExtendedPlayer((EntityPlayer)event.entity));
-				if (event.entity.getExtendedProperties("ExtendedProps") != null)
+				ExtendedPlayer.register((EntityPlayer)event.entity);
+				if (event.entity.getExtendedProperties(ExtendedPlayer.EXT_PLAYER) != null)
 				{
 					System.out.println("[ScourgeCraft] Extended properties registered successfully.");
 				}
@@ -57,7 +77,6 @@ public class PlayerEventListener {
 			{
 				System.out.println("[ScourgeCraft] Extended properties already exist.");
 			}
-
 		}
 	}
 }

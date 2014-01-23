@@ -4,6 +4,7 @@ import java.util.Random;
 
 import mods.scourgecraft.Home;
 import mods.scourgecraft.ScourgeCraftCore;
+import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.data.PermissionManager;
 import mods.scourgecraft.tileentity.TileEntityGoldProducer;
 import mods.scourgecraft.tileentity.TileEntityHomeHall;
@@ -39,7 +40,7 @@ public class BlockGoldProducer extends BlockContainer {
 		
 		if (par5EntityLivingBase instanceof EntityPlayer)
 		{
-	    	  Home home = PermissionManager.getHomeByPlayerName(((EntityPlayer)par5EntityLivingBase).username);
+	    	  Home home = HomeManager.getHomeByPlayerName(((EntityPlayer)par5EntityLivingBase).username);
 	    	  if (home != null)
 	    	  {
 	    		  TileEntityHomeHall teHome = (TileEntityHomeHall)par1World.getBlockTileEntity(home.xCoord, home.yCoord, home.zCoord);

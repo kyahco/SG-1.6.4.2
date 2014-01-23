@@ -10,6 +10,7 @@ import mods.scourgecraft.blocks.BlockCannon;
 import mods.scourgecraft.blocks.BlockGoldProducer;
 import mods.scourgecraft.blocks.BlockGoldStorage;
 import mods.scourgecraft.blocks.BlockHomeHall;
+import mods.scourgecraft.blocks.BlockRaidCenter;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.Configuration;
@@ -23,6 +24,8 @@ public class ConfigBlocks {
 	public static Block goldStorage;
 	public static int cannonID;
 	public static Block cannon;
+	public static int raidCenterID;
+	public static Block raidCenter;
 	
 	public void initConfig()
     {
@@ -44,6 +47,7 @@ public class ConfigBlocks {
 		goldProducerID = config.get("Blocks", "Gold Producer", 501).getInt();
 		goldStorageID = config.get("Blocks", "Gold Storage", 502).getInt();
 		cannonID = config.get("Attack Blocks", "Defense Cannon", 503).getInt();
+		raidCenterID = config.get("Spawn Blocks", "Raid Center", 504).getInt();
 		
         config.save();
     }
@@ -54,6 +58,7 @@ public class ConfigBlocks {
 		goldProducer = (new BlockGoldProducer(goldProducerID, Material.iron)).setCreativeTab(ScourgeCraftCore.tabBlocks).setUnlocalizedName("goldProducer");
 		goldStorage = (new BlockGoldStorage(goldStorageID, Material.iron)).setCreativeTab(ScourgeCraftCore.tabBlocks).setUnlocalizedName("goldStorage");
 		cannon = (new BlockCannon(cannonID, Material.iron)).setCreativeTab(ScourgeCraftCore.tabBlocks).setUnlocalizedName("cannon");
+		raidCenter = (new BlockRaidCenter(raidCenterID, Material.iron)).setCreativeTab(ScourgeCraftCore.tabBlocks).setUnlocalizedName("raidCenter");
     }
 	
 	public void register()
@@ -62,6 +67,7 @@ public class ConfigBlocks {
 		GameRegistry.registerBlock(goldProducer, ScourgeCraftCore.modid + "goldProducer");
 		GameRegistry.registerBlock(goldStorage, ScourgeCraftCore.modid + "goldStorage");
 		GameRegistry.registerBlock(cannon, ScourgeCraftCore.modid + "cannon");
+		GameRegistry.registerBlock(raidCenter, ScourgeCraftCore.modid + "raidCenter");
     }
 	
 	public void languageRegister()
@@ -72,5 +78,6 @@ public class ConfigBlocks {
 		LanguageRegistry.addName(goldProducer, "Gold Producer");
 		LanguageRegistry.addName(goldStorage, "Gold Storage");
 		LanguageRegistry.addName(cannon, "Defense Cannon");
+		LanguageRegistry.addName(raidCenter, "Raid Center");
 	}
 }

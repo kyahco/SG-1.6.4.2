@@ -77,11 +77,19 @@ public class GuiHomeHall extends GuiScreen {
 			drawString(this.fontRenderer, "Gold Storages " + tileHome.getBuildingCount(ScourgeCraftCore.configBlocks.goldStorageID) + "/" + TileEntityGoldStorage.getTotalMaxByTownLevel(tileHome.getLevel()), 10, 80, 0x66CC66);
 			drawString(this.fontRenderer, "Total Gold " + tileHome.getTotalResourceCount(ScourgeCraftCore.configBlocks.goldStorageID), 10, 90, 0x66CC66);
 			
-			this.buttonList.add(new GuiButton(3, 195, this.height - 150, 65, 20, "Test Raid"));
+			if (tileHome.hasNextLevel())
+			{
+				drawString(this.fontRenderer, "Next Level Stats", 10, 100, 0xFFCC00);
+				drawString(this.fontRenderer, "Level " + (tileHome.getLevel() + 1), 10, 110, 0x66CC66);
+				drawString(this.fontRenderer, "Max Gold Producers " + TileEntityGoldProducer.getTotalMaxByTownLevel(tileHome.getLevel() + 1), 10, 120, 0x66CC66);
+				drawString(this.fontRenderer, "Max Gold Storages " + TileEntityGoldStorage.getTotalMaxByTownLevel(tileHome.getLevel() + 1), 10, 130, 0x66CC66);
+				drawString(this.fontRenderer, "Upgrade Requirements", 10, 140, 0xFFCC00);
+				this.buttonList.add(new GuiButton(1, this.width - 124, 60, 115, 20, "Upgrade Level " + (tileHome.getLevel() + 1)));
+			}
 		}
 		else if (OtherPlayerTownHall())
 		{
-			drawCenteredString(this.fontRenderer, tileHome.getName(), this.width / 2, 10, 0x6699FF);
+			drawCenteredString(this.fontRenderer, tileHome.getHomeName(), this.width / 2, 10, 0x6699FF);
 			
 			
 		}
@@ -161,10 +169,6 @@ public class GuiHomeHall extends GuiScreen {
 				
             	extPlayer.myHome = home;
 			}
-		}
-		else if (button.id == 3)
-		{
-			PacketDispatcher.sendPacketToServer(new Packet5StartRaid("Player1", "Player2").makePacket());
 		}
 		else if (button.id == 10)
 		{

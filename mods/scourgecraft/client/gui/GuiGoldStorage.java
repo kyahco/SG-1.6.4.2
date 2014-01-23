@@ -57,7 +57,7 @@ public class GuiGoldStorage extends GuiScreen {
 				drawString(this.fontRenderer, "Level " + (teGold.getLevel() + 1), 10, 110, 0x66CC66);
 				drawString(this.fontRenderer, "Max Storage : " + (int)teGold.getMaxStorage(teGold.getLevel() + 1), 10, 120, 0x66CC66);
 				drawString(this.fontRenderer, "Upgrade Requirements", 10, 140, 0xFFCC00);
-				this.buttonList.add(new GuiButton(1, 9, 150, 110, 14, "Upgrade Level 2"));
+				this.buttonList.add(new GuiButton(1, this.width - 124, 60, 115, 20, "Upgrade Level " + (teGold.getLevel() + 1)));
 			}
 			
 		}

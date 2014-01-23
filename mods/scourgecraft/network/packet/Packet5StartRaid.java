@@ -15,6 +15,7 @@ import mods.scourgecraft.Raid;
 import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.data.PermissionManager;
+import mods.scourgecraft.data.RaidManager;
 import mods.scourgecraft.network.ScourgePacket;
 import mods.scourgecraft.player.ExtendedPlayer;
 import mods.scourgecraft.tileentity.TileEntityHomeHall;
@@ -55,9 +56,9 @@ public class Packet5StartRaid extends ScourgePacket {
             	}
             	if (defend != null)
             	{
-            		if (ScourgeCraftCore.raidManager.canRaid(player, defend))
+            		if (RaidManager.canRaid(player, defend))
             		{
-                		Raid r = ScourgeCraftCore.raidManager.startRaid(player, defend);
+                		Raid r = RaidManager.startRaid(player, defend);
                 		PacketDispatcher.sendPacketToAllPlayers(new Packet6RaidInfo(r).makePacket());
             		}
             	}

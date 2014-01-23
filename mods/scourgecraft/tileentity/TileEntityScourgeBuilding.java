@@ -15,15 +15,33 @@ import net.minecraft.world.World;
 
 public class TileEntityScourgeBuilding extends TileEntity 
 {
+	public class BuildingTask
+	{
+		public int xCoord;
+		public int yCoord;
+		public int zCoord;
+		public int blockId;
+		
+		public BuildingTask(int x, int y, int z, int block)
+		{
+			xCoord = x;
+			yCoord = y;
+			zCoord = z;
+			blockId = block;
+		}
+	}
+
+	protected List<BuildingTask> buildingTasks = Lists.newArrayList();
+	
 	public static final String NBT_BUILD_TIME = "BuildTime";
 	public static final String NBT_TIME_LEFT = "TimeLeft";
 	public static final String NBT_OWNER_NAME = "Owner";
 	public static final String NBT_LEVEL = "Level";
 	
 	private String owner;
-	private int buildTime;
-	private int timeLeft;
-	private int delay;
+	protected int buildTime;
+	protected int timeLeft;
+	protected int delay;
 	protected int level;
 	protected boolean sentBuildCommands = false;
 	
@@ -135,5 +153,16 @@ public class TileEntityScourgeBuilding extends TileEntity
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
 	{
 		this.readFromNBT(pkt.data);
+	}
+	
+	
+	public void build()
+	{
+		timeLeft = buildTime;
+		if (isCompleted())
+			buildingTasks.clear();
+		
+		if (buildingTasks.size() > 0)
+			delay = buildTime / buildingTasks.size();
 	}
 }

@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.io.File;
 
 import mods.scourgecraft.ScourgeCraftCore;
+import mods.scourgecraft.blocks.BlockGoldProducer;
+import mods.scourgecraft.config.ConfigBlocks;
 import mods.scourgecraft.entity.EntityCannon;
 import mods.scourgecraft.entity.projectile.EntityCannonBall;
 import mods.scourgecraft.entity.render.RenderCannon;
@@ -16,12 +18,14 @@ import mods.scourgecraft.tileentity.TileEntityGoldProducer;
 import mods.scourgecraft.tileentity.TileEntityGoldStorage;
 import mods.scourgecraft.tileentity.TileEntityHomeHall;
 import mods.scourgecraft.tileentity.TileEntityScourgeBuilding;
+import mods.scourgecraft.tileentity.render.ItemGoldProducerRenderer;
 import mods.scourgecraft.tileentity.render.ModelGoldProducer;
 import mods.scourgecraft.tileentity.render.ModelGoldStorage;
 import mods.scourgecraft.tileentity.render.ModelHomeHall;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -40,7 +44,8 @@ public class ClientProxy extends CommonProxy
             super.registerHandlers();
             TickRegistry.registerTickHandler(playerTickHandler, Side.CLIENT);
             TickRegistry.registerTickHandler(playerOverlayGUI, Side.CLIENT);
-        	
+            
+            MinecraftForgeClient.registerItemRenderer(ConfigBlocks.goldProducerID, new ItemGoldProducerRenderer());
         	
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHomeHall.class, new ModelHomeHall());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldStorage.class, new ModelGoldStorage());

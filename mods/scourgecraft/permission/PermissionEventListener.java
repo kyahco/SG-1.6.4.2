@@ -28,60 +28,66 @@ public class PermissionEventListener
 
 		if (line.contains(".home"))
 		{
-			ExtendedPlayer extPlayer = ExtendedPlayer.getExtendedPlayer(event.player);
-			if (extPlayer != null && extPlayer.myHome != null)
-				event.player.setPositionAndUpdate(extPlayer.myHome.xCoord, extPlayer.myHome.yCoord + 1, extPlayer.myHome.zCoord);
+			Home h = HomeManager.getHomeByPlayerName(event.player.username);
+			if (h != null)
+				event.player.setPositionAndUpdate(h.xCoord, h.yCoord + 1, h.zCoord);
 		}
 	}
 	
 	 @ForgeSubscribe
 	  public void PlayerInteract(PlayerInteractEvent event)
 	  {
-		 String cancelMessage = "";
-		 boolean cancelEvent = false;
-	    if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
-	    {
-
-	      if (event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) == ScourgeCraftCore.configBlocks.homeHallID)
-	      {
-	    	  cancelEvent = true;
-	    	  cancelMessage = "Home Halls cannot be destroyed.";
-	      }
-	      
-	      if (!PermissionManager.canLeftClickBlock(event.entityPlayer.username, event.x, event.y, event.z))
-	      {
-	    	  cancelEvent = true;
-	    	  cancelMessage = "You cannot modify another players home.";
-	      }
-
-	      if (cancelEvent)
-	      {
-	        if (!event.entityPlayer.worldObj.isRemote) // For some reason the client will not call this, only the server does.
-	        		event.entityPlayer.addChatMessage(cancelMessage);
-	          event.setCanceled(true);
-	      }
-	    }
-	    
-	    if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
-	    {
-	    	if (event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) == ScourgeCraftCore.configBlocks.homeHallID)
-		      {
-		    	  return;
-		      }
-	    	
-		   if (!PermissionManager.canRightClickBlock(event.entityPlayer.username, event.x, event.y, event.z))
-		   {
-			   cancelEvent = true;
-		    	cancelMessage = "You cannot build outside your home.";
+			String cancelMessage = "";
+			boolean cancelEvent = false;
+		    if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
+		    {
+			    if (event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) == ScourgeCraftCore.configBlocks.homeHallID)
+			    {
+			    	  cancelEvent = true;
+			    	  cancelMessage = "Home Halls cannot be destroyed.";
+			    }
+			    
+		    	Home h = HomeManager.getPointInHome(event.x, event.y, event.z); //Due to CPU cycles, should this go at the end?
+		    	if (h != null)
+		    	{ //This Attack is Inside a Home.
+		    		if (h.ownerUsername.equals(event.entityPlayer.username))
+		    		{ //Your Attacking your Own stuff
+		    			
+		    		}
+		    		else
+		    		{ //Attacking Someone else's stuff
+		    			cancelEvent = true;
+				    	cancelMessage = "You cannot modify another players home.";
+		    		}
+		    	}
+			    if (cancelEvent)
+			    {
+			    	if (!event.entityPlayer.worldObj.isRemote) // For some reason the client will not call this, only the server does.
+			    		event.entityPlayer.addChatMessage(cancelMessage);
+			        event.setCanceled(true);
+			    }
 		    }
-	      
-	      if (cancelEvent)
-	      {
-	    	  if (event.entityPlayer.worldObj.isRemote)
-	        		event.entityPlayer.addChatMessage(cancelMessage);
-	          event.setCanceled(true);
-	      }
-	    }
+	    
+		    if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
+		    {
+			    if (event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z) == ScourgeCraftCore.configBlocks.homeHallID)
+				{
+			    	return;
+				}
+			    	
+				if (!PermissionManager.canRightClickBlock(event.entityPlayer.username, event.x, event.y, event.z))
+				{
+					cancelEvent = true;
+					cancelMessage = "You cannot build outside your home.";
+				}
+			      
+			    if (cancelEvent)
+			    {
+			    	if (event.entityPlayer.worldObj.isRemote)
+			    		event.entityPlayer.addChatMessage(cancelMessage);
+			        event.setCanceled(true);
+			    }
+		    }
 	  }
 
 	public ArrayList<String> GetAvailablePerms()

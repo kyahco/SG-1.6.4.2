@@ -73,17 +73,11 @@ public class HomeManager {
             System.out.println("Created");
 	}
 	
-	public static void playerLogin(EntityPlayer player, boolean sendAllHomes)
+	public static void playerLogin(EntityPlayer player)
 	{
 		for (Home h : homeList.values())
 		{
-			if (h.ownerUsername.equals(player.username))
-			{
-				ExtendedPlayer.getExtendedPlayer(player).myHome = h;
-				PacketDispatcher.sendPacketToPlayer(new Packet1HomeInfo(h).makePacket(), (Player)player);
-			}
-			else if (sendAllHomes)
-				PacketDispatcher.sendPacketToPlayer(new Packet1HomeInfo(h).makePacket(), (Player)player);
+			PacketDispatcher.sendPacketToPlayer(new Packet1HomeInfo(h).makePacket(), (Player)player);
 		}
 			
 	}
@@ -182,6 +176,26 @@ public class HomeManager {
 		return false;
 	}
 	
+	public static boolean IsPointInHome(int x, int y, int z)
+	{
+		for (Home h : homeList.values())
+		{
+			if (IsPointInHome(h, x, y, z))
+				return true;
+		}
+		return false;
+	}
+	
+	public static Home getPointInHome(int x, int y, int z)
+	{
+		for (Home h : homeList.values())
+		{
+			if (IsPointInHome(h, x, y, z))
+				return h;
+		}
+		return null;
+	}
+	
 	public static List<Home> getHomesStartWith(String compared, int maxAmount, int pageNumber)
 	{
 		int control = (maxAmount * pageNumber) + maxAmount;
@@ -201,5 +215,10 @@ public class HomeManager {
 				return toReturn;
 		}
 		return toReturn;
+	}
+	
+	public static boolean hasHome(String username)
+	{
+		return homeList.containsKey(username);
 	}
 }

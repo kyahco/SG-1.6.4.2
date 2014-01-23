@@ -18,9 +18,7 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 public class ExtendedPlayer implements IExtendedEntityProperties
 {
 	public static final String EXT_PLAYER = "SCExtended";
-	public Home myHome;
-	public Raid myRaid;
-
+	
 	// I always include the entity to which the properties belong for easy access
 	// It's final because we won't be changing which player it is
 	private final EntityPlayer player;

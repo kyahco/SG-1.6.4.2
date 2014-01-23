@@ -23,7 +23,7 @@ public class BlockRaidCenter extends BlockContainer {
 	public BlockRaidCenter(int par1, Material par2Material) {
 		super(par1, par2Material);
 		
-		setHardness(50.0F); 
+		setBlockUnbreakable();
 	}
 
 	@Override

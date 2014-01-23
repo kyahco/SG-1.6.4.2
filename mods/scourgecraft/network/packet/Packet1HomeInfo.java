@@ -49,12 +49,6 @@ public class Packet1HomeInfo extends ScourgePacket {
     @Override
     protected void execute(EntityPlayer player, Side side) {
             if (side.isClient()) {
-            	if (home.ownerUsername.equals(player.username))
-            	{
-            		ExtendedPlayer extPlayer = ExtendedPlayer.getExtendedPlayer(player);
-                    if (extPlayer != null)
-                    	extPlayer.myHome = home;
-            	}
             	HomeManager.homeList.put(home.ownerUsername, home);
             } 
     }

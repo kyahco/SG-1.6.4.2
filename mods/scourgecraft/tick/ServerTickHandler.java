@@ -20,13 +20,11 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 public class ServerTickHandler implements ITickHandler {
 	private int tickCount = 0;
 
-	private boolean hasLoaded = false;
-	
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) 
 	{
-		if (type.equals(EnumSet.of(TickType.SERVER)))
-			RaidManager.tick();
+		if (type.equals(EnumSet.of(TickType.PLAYER)))
+			RaidManager.tick(true);
 	}
 
 	@Override
@@ -37,7 +35,7 @@ public class ServerTickHandler implements ITickHandler {
 	@Override
 	public EnumSet<TickType> ticks() {
 		// TODO Auto-generated method stub
-		return EnumSet.of(TickType.SERVER, TickType.WORLD);
+		return EnumSet.of(TickType.PLAYER);
 	}
 
 	@Override

@@ -4,7 +4,9 @@ import java.util.EnumSet;
 
 import org.lwjgl.opengl.GL11;
 
+import mods.scourgecraft.Raid;
 import mods.scourgecraft.client.gui.GuiResourceFile;
+import mods.scourgecraft.data.RaidManager;
 import mods.scourgecraft.player.ExtendedPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -58,19 +60,20 @@ public class PlayerOverlayGUI  implements ITickHandler {
 				if (ticks == 100)
 					ticks = 0;
 				
-				if (extPlayer.myRaid != null)
+				if (RaidManager.isInRaid(mc.thePlayer.username))
 				{
+					Raid r = RaidManager.getRaidByUsername(mc.thePlayer.username);
 					mc.getTextureManager().bindTexture(GuiResourceFile.factions);
-					if (extPlayer.myRaid.roundType == 1)	
+					if (r.roundType == 1)	
 						gui.drawTexturedModalRect(width / 2 - 100, 2, 0, 0, 32, 32);
-					else if (extPlayer.myRaid.roundType == 2)
+					else if (r.roundType == 2)
 						gui.drawTexturedModalRect(width / 2 - 100, 2, 32, 0, 32, 32);
-					else if (extPlayer.myRaid.roundType == 3)
+					else if (r.roundType == 3)
 						gui.drawTexturedModalRect(width / 2 - 100, 2, 64, 0, 32, 32);
-					else if (extPlayer.myRaid.roundType == 4)
+					else if (r.roundType == 4)
 						gui.drawTexturedModalRect(width / 2 - 100, 2, 96, 0, 32, 32);
 					
-					fontRender.drawString("Raid Event :" + extPlayer.myRaid.timeLeft, 3 , height / 2 + 52, color);
+					fontRender.drawString("Raid Event :" + r.timeLeft + " : " + r.roundType, 3 , height / 2 + 52, color);
 				}
 			}
 		}

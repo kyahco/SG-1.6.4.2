@@ -14,6 +14,7 @@ import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 
 public class PlayerEventListener {
 	public static int VIT_FOR_PLAYER_KILL = 3;
@@ -36,9 +37,6 @@ public class PlayerEventListener {
 		
 		if (event.entity instanceof EntityPlayer)
 		{
-			ExtendedPlayer extPlayer = ExtendedPlayer.getExtendedPlayer((EntityPlayer)event.entity);
-			if (extPlayer.myHome == null)
-				((EntityPlayer)event.entity).addChatMessage("Was Null");
 			ExtendedPlayer.saveProxyData((EntityPlayer) event.entity);
 		}
 	}

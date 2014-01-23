@@ -63,8 +63,7 @@ public class Packet2CreateHome extends ScourgePacket {
                     	teHome.setOwner(home.ownerUsername);
                     	player.worldObj.markBlockForUpdate(home.xCoord, home.yCoord, home.zCoord);
                     	teHome.build();
-                    	ExtendedPlayer extPlayer = ExtendedPlayer.getExtendedPlayer(remotePlayer);
-                    	extPlayer.myHome = home;
+
                     	PacketDispatcher.sendPacketToAllPlayers(new Packet1HomeInfo(home).makePacket());
                     }
                     else

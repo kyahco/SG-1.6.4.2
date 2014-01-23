@@ -26,7 +26,7 @@ public class BlockHomeHall extends BlockContainer {
 	public BlockHomeHall(int par1) {
         super(par1, Material.iron);
         
-        setHardness(50.0F); 
+        setBlockUnbreakable();
 	}
 
 	/**

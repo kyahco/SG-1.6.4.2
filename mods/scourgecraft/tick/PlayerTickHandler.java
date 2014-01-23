@@ -12,7 +12,7 @@ public class PlayerTickHandler implements ITickHandler {
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		if (type.equals(EnumSet.of(TickType.PLAYER)))
-			RaidManager.tick();
+			RaidManager.tick(false);
 		
 	}
 

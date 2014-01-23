@@ -48,7 +48,7 @@ public class GuiHandler implements IGuiHandler
 		switch (ID)
 		{
 			default: return null;
-			case 0: return new GuiHomeHall(player, world, x, y, z);
+			case 0: return new GuiHomeHall(player, (TileEntityHomeHall)world.getBlockTileEntity(x, y, z), world, x, y, z);
 			case 1: return new GuiBuildingInProgress((TileEntityScourgeBuilding)world.getBlockTileEntity(x, y, z), x, y, z);
 			case 2: return new GuiGoldProducer((TileEntityGoldProducer)world.getBlockTileEntity(x, y, z), x, y, z);
 			case 3: return new GuiGoldStorage((TileEntityGoldStorage)world.getBlockTileEntity(x, y, z), x, y, z);

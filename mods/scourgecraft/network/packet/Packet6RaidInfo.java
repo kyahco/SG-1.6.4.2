@@ -22,8 +22,6 @@ import mods.scourgecraft.player.ExtendedPlayer;
 public class Packet6RaidInfo extends ScourgePacket {
 
 	private Raid raid;
-	private String attacker;
-	private String defender;
    
     public Packet6RaidInfo(Raid par1Raid) {
     		this.raid = par1Raid;
@@ -42,8 +40,8 @@ public class Packet6RaidInfo extends ScourgePacket {
     @Override
     protected void read(ByteArrayDataInput in) {
     	raid = new Raid();
-    	attacker = in.readUTF();
-    	defender = in.readUTF();
+    	raid.attackerName = in.readUTF();
+    	raid.defenderName = in.readUTF();
     	raid.timeLeft = in.readInt();
     	raid.roundType = in.readShort();
     }
@@ -51,23 +49,7 @@ public class Packet6RaidInfo extends ScourgePacket {
     @Override
     protected void execute(EntityPlayer player, Side side) {
             if (side.isClient()) {
-            	for (Object ws : Minecraft.getMinecraft().thePlayer.worldObj.playerEntities)
-            	{
-            		EntityPlayer thisPlayer = (EntityPlayer)ws;
-            		if (thisPlayer.username.equals(defender))
-            			raid.defender = thisPlayer;
-            		else if (thisPlayer.username.equals(attacker))
-            			raid.attacker = thisPlayer;
-            		if (raid.defender != null && raid.attacker != null) //We have both values, leave loop.
-            			break;
-            	}
-            	raid.attackerHome = HomeManager.getHomeByPlayerName(raid.attacker.username);
-            	raid.defenderHome = HomeManager.getHomeByPlayerName(raid.defender.username);
-            	if (raid.attacker.username.equals(player.username) || 
-            			raid.defender.username.equals(player.username))
-            		ExtendedPlayer.getExtendedPlayer(player).myRaid = raid;
-            	
-            	RaidManager.raidList.put(attacker, raid);
+            	RaidManager.raidList.put(raid.attackerName, raid);
             } 
     }
 }

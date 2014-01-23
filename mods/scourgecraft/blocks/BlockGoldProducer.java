@@ -6,6 +6,7 @@ import mods.scourgecraft.Home;
 import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.data.PermissionManager;
+import mods.scourgecraft.player.ExtendedPlayer;
 import mods.scourgecraft.tileentity.TileEntityGoldProducer;
 import mods.scourgecraft.tileentity.TileEntityHomeHall;
 import net.minecraft.block.BlockContainer;
@@ -22,7 +23,7 @@ public class BlockGoldProducer extends BlockContainer {
 	public BlockGoldProducer(int par1, Material par2Material) {
 		super(par1, par2Material);
 		
-		setHardness(50.0F); 
+		setBlockUnbreakable();
 	}
 
 	@Override
@@ -81,6 +82,12 @@ public class BlockGoldProducer extends BlockContainer {
 	    	
 	        return true;
 	    }
+	}
+	
+	@Override
+	public void onBlockClicked(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer) 
+	{
+
 	}
 	
 	//You don't want the normal render type, or it wont render properly.

@@ -4,9 +4,10 @@ public class TileEntityGoldStorage extends TileEntityScourgeResource
 {	
 	public static final int BUILD_TIME = 1000;
 	
-	public TileEntityGoldStorage()
-	{
+	public TileEntityGoldStorage() {
 		super(BUILD_TIME);
+		
+		stealPercentage = 0.10;
 	}
 	
 	@Override

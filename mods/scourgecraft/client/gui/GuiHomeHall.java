@@ -19,6 +19,7 @@ import mods.scourgecraft.player.ExtendedPlayer;
 import mods.scourgecraft.tileentity.TileEntityGoldProducer;
 import mods.scourgecraft.tileentity.TileEntityGoldStorage;
 import mods.scourgecraft.tileentity.TileEntityHomeHall;
+import mods.scourgecraft.tileentity.TileEntityScourgeBuilding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -42,12 +43,13 @@ public class GuiHomeHall extends GuiScreen {
 	private int zCoord;
 	private TileEntityHomeHall tileHome;
 	
-	public GuiHomeHall(EntityPlayer player, World par1World, int x, int y, int z) {
+	public GuiHomeHall(EntityPlayer player, TileEntityHomeHall tile, World par1World, int x, int y, int z) {
 		playerPar1 = player;
 		xCoord = x;
 		yCoord = y;
 		zCoord = z;
 		world = par1World;
+		tileHome = tile;
 	}
 
 	@Override 
@@ -56,9 +58,6 @@ public class GuiHomeHall extends GuiScreen {
 		txtTownName = new GuiTextField(fontRenderer, 180 , this.height - 75, 100, 20);
 		txtTownName.setMaxStringLength(16);
 		extPlayer = ExtendedPlayer.getExtendedPlayer(playerPar1);
-		tileHome = (TileEntityHomeHall) world.getBlockTileEntity(xCoord, yCoord, zCoord);
-		if (tileHome == null)
-			System.out.println("[ScourgeCraft] TileHome in InitGui is null");
 	}
 	
 	@Override
@@ -146,7 +145,8 @@ public class GuiHomeHall extends GuiScreen {
 	{
 		if (button.id == 0)
 		{
-			if (extPlayer.myHome == null)
+			Home h = HomeManager.getHomeByPlayerName(playerPar1.username);
+			if (h != null)
 			{
 				if (townName.length() < 4)
 				{
@@ -166,8 +166,6 @@ public class GuiHomeHall extends GuiScreen {
 				PacketDispatcher.sendPacketToServer(new Packet2CreateHome(home).makePacket());
 				
 				playerPar1.openGui(ScourgeCraftCore.instance, 1, world, xCoord, yCoord, zCoord);
-				
-            	extPlayer.myHome = home;
 			}
 		}
 		else if (button.id == 10)
@@ -178,7 +176,7 @@ public class GuiHomeHall extends GuiScreen {
 	
 	private boolean MyTownHall()
 	{
-		return extPlayer != null && extPlayer.myHome != null && tileHome != null && tileHome.getOwner().equals(playerPar1.username);
+		return AlreadyHaveTownHall() && tileHome != null && tileHome.getOwner().equals(playerPar1.username);
 	}
 	
 	private boolean OtherPlayerTownHall()
@@ -188,6 +186,6 @@ public class GuiHomeHall extends GuiScreen {
 	
 	private boolean AlreadyHaveTownHall()
 	{
-		return extPlayer != null && extPlayer.myHome != null;
+		return HomeManager.hasHome(playerPar1.username);
 	}
 }

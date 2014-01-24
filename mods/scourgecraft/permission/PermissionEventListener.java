@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.data.PermissionManager;
+import mods.scourgecraft.data.RaidManager;
 import mods.scourgecraft.helpers.Home;
+import mods.scourgecraft.helpers.Raid;
 import mods.scourgecraft.player.ExtendedPlayer;
 import mods.scourgecraft.tileentity.TileEntityGoldProducer;
 import mods.scourgecraft.tileentity.TileEntityHomeHall;
@@ -56,6 +58,13 @@ public class PermissionEventListener
 		    		}
 		    		else
 		    		{ //Attacking Someone else's stuff
+		    			Raid r = RaidManager.getRaidByUsername(event.entityPlayer.username);
+		    			if (r != null  && !r.isEnded && r.roundType == 3)
+		    			{
+		    				if (r.attackerName.equals(event.entityPlayer.username) &&
+		    						h.ownerUsername.equals(r.defenderName)) //This means the Attacker is the person on the event, and the defenders of the raid matchers the owner of the house's item.
+		    					return;
+		    			}
 		    			cancelEvent = true;
 				    	cancelMessage = "You cannot modify another players home.";
 		    		}

@@ -7,9 +7,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 import com.google.common.collect.Lists;
 
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import mods.scourgecraft.ScourgeCraftCore;
@@ -23,6 +25,7 @@ import mods.scourgecraft.tileentity.TileEntityScourgeBuilding;
 import mods.scourgecraft.tileentity.TileEntityScourgeResource;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.MathHelper;
 import net.sourceforge.yamlbeans.YamlException;
 import net.sourceforge.yamlbeans.YamlReader;
 import net.sourceforge.yamlbeans.YamlWriter;
@@ -153,6 +156,28 @@ public class HomeManager {
 		}
 	}
 	
+	//This is called when a RAID is over or given by admin, etc.
+	public static void distributeResource(EntityPlayer par1Player, double amount)
+	{
+		Home home = getHomeByPlayerName(par1Player.username);
+		
+		if (home != null)
+		{
+			TileEntityHomeHall teHome = (TileEntityHomeHall)par1Player.worldObj.getBlockTileEntity(home.xCoord, home.yCoord, home.zCoord);
+		
+			List<TileEntityScourgeBuilding> list = teHome.getBuildingsByBlock(ScourgeCraftCore.configBlocks.goldStorageID);
+			for (int i = 0; i < list.size(); i++)
+			{
+				TileEntityGoldStorage teGold = (TileEntityGoldStorage)list.get(i);
+				if (teGold.isCompleted()) // Only storages that are complete can be stored in.
+				{
+					teGold.storeGold(amount);
+					teGold.worldObj.playSoundEffect((double)((float)teGold.xCoord + 0.5F), (double)((float)teGold.yCoord + 0.5F), (double)((float)teGold.zCoord + 0.5F), ScourgeCraftCore.modid.toLowerCase() + ":" + "goldcollect", 2.0f, 2.0f);
+				}
+			}
+		}
+	}
+	
 	public static Home getHomeByPlayerName(String username)
 	{
 		for (String h : homeList.keySet())
@@ -220,5 +245,30 @@ public class HomeManager {
 	public static boolean hasHome(String username)
 	{
 		return homeList.containsKey(username);
+	}
+	
+	public static void startEndRaid(EntityPlayer par1Player, boolean startRaid)
+	{
+		Home h = HomeManager.getHomeByPlayerName(par1Player.username);
+		
+		if (h != null)
+		{
+			TileEntityHomeHall teHome = (TileEntityHomeHall)par1Player.worldObj.getBlockTileEntity(h.xCoord, h.yCoord, h.zCoord);
+			
+			if (teHome != null)
+			{
+				List<TileEntityScourgeResource> list = teHome.getAllScourgeResourceBuildings();
+				for (TileEntityScourgeResource teResource : list)
+				{
+					if (startRaid)
+						teResource.startRaid();
+					else
+						teResource.endRaid();
+					par1Player.addChatMessage("You can steal " + teResource.getStealAmount());
+				}
+			}
+		}
+		else
+			FMLLog.log(Level.SEVERE, "User %s is starting a raid but doesn't know about his own home!", par1Player.username);
 	}
 }

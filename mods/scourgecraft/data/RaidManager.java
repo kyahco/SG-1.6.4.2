@@ -1,5 +1,6 @@
 package mods.scourgecraft.data;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,7 +33,6 @@ public class RaidManager
 	
 	public static Raid startRaid(EntityPlayer par1PlayerAttacker, EntityPlayer par1PlayerDefender)
 	{ 
-		//Ran on server only.
 		Raid r = new Raid();
 		
 		r.setAttacker(par1PlayerAttacker);
@@ -46,6 +46,8 @@ public class RaidManager
 		
 		raidList.put(par1PlayerAttacker.username, r);
 		
+		HomeManager.startEndRaid(par1PlayerDefender, true);
+		
 		r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "warmup", 2.0f, 2.0f);
 		r.defender.worldObj.playSoundAtEntity(r.defender, ScourgeCraftCore.modid.toLowerCase() + ":" + "warmup", 2.0f, 2.0f);
 
@@ -56,20 +58,23 @@ public class RaidManager
 	
 	public static void playerLogin(EntityPlayer player)
 	{
-		for (Raid h : RaidManager.raidList.values())
+		for (Raid r : RaidManager.raidList.values())
 		{
-			PacketDispatcher.sendPacketToPlayer(new Packet6RaidInfo(h).makePacket(), (Player)player);;
+			PacketDispatcher.sendPacketToPlayer(new Packet6RaidInfo(r).makePacket(), (Player)player);
 		}
 	}
 	
-	public static void tick(boolean isServer)
-	{
+	public static void tick()
+	{ //TODO only send updates the main players each raid, yet update each other player during changes of rounds.
 		for (Raid r : raidList.values())
 		{
 			r.timeLeft--;
+			if (r.timeLeft % 20 == 0)
+				PacketDispatcher.sendPacketToAllPlayers(new Packet6RaidInfo(r).makePacket());
 			if (r.timeLeft <= 0)
 			{
-				advanceRound(r, isServer);
+				advanceRound(r);
+				PacketDispatcher.sendPacketToAllPlayers(new Packet6RaidInfo(r).makePacket());
 			}
 			if (r.isEnded)
 			{
@@ -78,6 +83,14 @@ public class RaidManager
 		}
 		for (Raid r : endedRaidList)
 		{
+			HomeManager.startEndRaid(r.defender, false);
+			if (r.goldStolen > 0)
+			{
+				HomeManager.distributeResource(r.attacker, r.goldStolen);
+				DecimalFormat df = new DecimalFormat("#.##");
+				r.attacker.addChatMessage("[ScourgeCraft] You have raided " + df.format(r.goldStolen) + " gold!");
+			}
+			PacketDispatcher.sendPacketToAllPlayers(new Packet6RaidInfo(r).makePacket());
 			raidList.remove(r.attackerName);
 		}
 		endedRaidList.clear();
@@ -92,14 +105,14 @@ public class RaidManager
 			case 2:
 				return 400;
 			case 3:
-				return 400;
+				return 2000;
 			case 4:
 				return 400;
 		}
 		return 0;
 	}
 
-	private static void advanceRound(Raid r, boolean isServer)
+	private static void advanceRound(Raid r)
 	{
 		switch (r.roundType)
 		{
@@ -108,18 +121,16 @@ public class RaidManager
 				r.roundType = 2;
 				r.timeLeft = setTimeLeft(r.roundType);
 				
-				if (isServer)
-				{
-					r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "balance", 2.0f, 2.0f);
-					r.defender.worldObj.playSoundAtEntity(r.defender, ScourgeCraftCore.modid.toLowerCase() + ":" + "balance", 2.0f, 2.0f);
-					r.attacker.addChatMessage("[ScourgeCraft] You have been teleported to the home of " + r.defender.username);
-					r.attacker.addChatMessage("[ScourgeCraft] Once the War period begins, you may attack!");
-					r.defender.addChatMessage("[ScourgeCraft] You are being teleported to your home.");
-					r.defender.addChatMessage("[ScourgeCraft] Protect yourself and your home!");
+
+				r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "balance", 2.0f, 2.0f);
+				r.defender.worldObj.playSoundAtEntity(r.defender, ScourgeCraftCore.modid.toLowerCase() + ":" + "balance", 2.0f, 2.0f);
+				r.attacker.addChatMessage("[ScourgeCraft] You have been teleported to the home of " + r.defender.username);
+				r.attacker.addChatMessage("[ScourgeCraft] Once the War period begins, you may attack!");
+				r.defender.addChatMessage("[ScourgeCraft] You are being teleported to your home.");
+				r.defender.addChatMessage("[ScourgeCraft] Protect yourself and your home!");
 					
-					FunctionHelper.setPlayer((EntityPlayerMP)r.attacker, new WarpPoint(0, r.defenderHome.xCoord + HomeManager.getHomeSize(r.defenderHome.level) + 5, r.defenderHome.yCoord, r.defenderHome.zCoord + HomeManager.getHomeSize(r.defenderHome.level) + 5, r.attacker.rotationYaw , r.attacker.rotationPitch));
-					FunctionHelper.setPlayer((EntityPlayerMP)r.defender, new WarpPoint(0, r.defenderHome.xCoord, r.defenderHome.yCoord, r.defenderHome.zCoord, r.defender.rotationYaw , r.defender.rotationPitch));
-				}
+				FunctionHelper.setPlayer((EntityPlayerMP)r.attacker, new WarpPoint(0, r.defenderHome.xCoord + HomeManager.getHomeSize(r.defenderHome.level) + 5, r.defenderHome.yCoord, r.defenderHome.zCoord + HomeManager.getHomeSize(r.defenderHome.level) + 5, r.attacker.rotationYaw , r.attacker.rotationPitch));
+				FunctionHelper.setPlayer((EntityPlayerMP)r.defender, new WarpPoint(0, r.defenderHome.xCoord, r.defenderHome.yCoord, r.defenderHome.zCoord, r.defender.rotationYaw , r.defender.rotationPitch));
 				break;
 			}
 			case 2:
@@ -127,14 +138,12 @@ public class RaidManager
 				r.roundType = 3;
 				r.timeLeft = setTimeLeft(r.roundType);
 				
-				if (isServer)
-				{
-					r.defender.worldObj.playSoundAtEntity(r.defender, ScourgeCraftCore.modid.toLowerCase() + ":" + "warcry", 2.0f, 2.0f);
-					r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "warcry", 2.0f, 2.0f);
+				r.defender.worldObj.playSoundAtEntity(r.defender, ScourgeCraftCore.modid.toLowerCase() + ":" + "warcry", 2.0f, 2.0f);
+				r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "warcry", 2.0f, 2.0f);
 					
-					r.attacker.addChatMessage("[ScourgeCraft] The War Period has begun! Best of luck!");
-					r.defender.addChatMessage("[ScourgeCraft] The War Period has begun! Best of luck!");
-				}
+				r.attacker.addChatMessage("[ScourgeCraft] The War Period has begun! Best of luck!");
+				r.defender.addChatMessage("[ScourgeCraft] The War Period has begun! Best of luck!");
+				
 				break;
 			}
 			case 3:
@@ -142,22 +151,17 @@ public class RaidManager
 				r.roundType = 4;
 				r.timeLeft = setTimeLeft(r.roundType);
 				
-				if (isServer)
-				{
-					r.defender.worldObj.playSoundAtEntity(r.defender, ScourgeCraftCore.modid.toLowerCase() + ":" + "warend", 2.0f, 2.0f);
-					r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "warend", 2.0f, 2.0f);
-					r.attacker.addChatMessage("[ScourgeCraft] The War Period has ended! The Raid is now over.");
-					r.defender.addChatMessage("[ScourgeCraft] The War Period has ended! The Raid is now over.");
-				}
+				r.defender.worldObj.playSoundAtEntity(r.defender, ScourgeCraftCore.modid.toLowerCase() + ":" + "warend", 2.0f, 2.0f);
+				r.attacker.worldObj.playSoundAtEntity(r.attacker, ScourgeCraftCore.modid.toLowerCase() + ":" + "warend", 2.0f, 2.0f);
+				r.attacker.addChatMessage("[ScourgeCraft] The War Period has ended! The Raid is now over.");
+				r.defender.addChatMessage("[ScourgeCraft] The War Period has ended! The Raid is now over.");
 				break;
 			}
 			case 4:
 			{
-				if (isServer)
-				{
-					FunctionHelper.setPlayer((EntityPlayerMP)r.attacker, new WarpPoint(0, r.attackerHome.xCoord, r.attackerHome.yCoord + 1, r.attackerHome.zCoord, r.attacker.rotationYaw , r.attacker.rotationPitch));
-					FunctionHelper.setPlayer((EntityPlayerMP)r.defender, new WarpPoint(0, r.defenderHome.xCoord, r.defenderHome.yCoord + 1, r.defenderHome.zCoord, r.defender.rotationYaw , r.defender.rotationPitch));
-				}
+
+				FunctionHelper.setPlayer((EntityPlayerMP)r.attacker, new WarpPoint(0, r.attackerHome.xCoord, r.attackerHome.yCoord + 1, r.attackerHome.zCoord, r.attacker.rotationYaw , r.attacker.rotationPitch));
+				FunctionHelper.setPlayer((EntityPlayerMP)r.defender, new WarpPoint(0, r.defenderHome.xCoord, r.defenderHome.yCoord + 1, r.defenderHome.zCoord, r.defender.rotationYaw , r.defender.rotationPitch));
 				r.isEnded = true;
 				break;
 			}

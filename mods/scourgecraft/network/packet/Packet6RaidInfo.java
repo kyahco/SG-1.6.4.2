@@ -35,6 +35,8 @@ public class Packet6RaidInfo extends ScourgePacket {
     		out.writeUTF(raid.defender.username);
     		out.writeInt(raid.timeLeft);
     		out.writeShort(raid.roundType);
+    		out.writeDouble(raid.goldStolen);
+    		out.writeBoolean(raid.isEnded);
     }
 
     @Override
@@ -44,12 +46,29 @@ public class Packet6RaidInfo extends ScourgePacket {
     	raid.defenderName = in.readUTF();
     	raid.timeLeft = in.readInt();
     	raid.roundType = in.readShort();
+    	raid.goldStolen = in.readDouble();
+    	raid.isEnded = in.readBoolean();
     }
 
     @Override
     protected void execute(EntityPlayer player, Side side) {
             if (side.isClient()) {
-            	RaidManager.raidList.put(raid.attackerName, raid);
+            	if (raid.isEnded)
+            	{
+            		RaidManager.raidList.remove(raid.attackerName);
+            		if (raid.defenderName.equals(player.username))
+                		HomeManager.startEndRaid(player, false);
+            		else if (raid.attackerName.equals(player.username))
+            			HomeManager.distributeResource(player, raid.goldStolen);
+            	}
+            	else
+            	{
+            		if (!RaidManager.raidList.containsKey(raid.attackerName) &&
+            				raid.defenderName.equals(player.username)) //Make sure its the first packet for this raid && the defender knows to display the correct new steal amount
+            			HomeManager.startEndRaid(player, true);
+            		RaidManager.raidList.put(raid.attackerName, raid);
+            		
+            	}
             } 
     }
 }

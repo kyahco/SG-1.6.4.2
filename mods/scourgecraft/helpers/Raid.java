@@ -16,6 +16,8 @@ public class Raid
 	public Home defenderHome;
 	public Home attackerHome;
 	
+	public double goldStolen;
+	
 	public void setAttacker(EntityPlayer par1Attacker)
 	{
 		attacker = par1Attacker;

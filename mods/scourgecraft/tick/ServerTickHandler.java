@@ -24,7 +24,7 @@ public class ServerTickHandler implements ITickHandler {
 	public void tickStart(EnumSet<TickType> type, Object... tickData) 
 	{
 		if (type.equals(EnumSet.of(TickType.PLAYER)))
-			RaidManager.tick(true);
+			RaidManager.tick();
 	}
 
 	@Override

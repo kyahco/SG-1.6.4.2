@@ -77,7 +77,7 @@ public class TileEntityScourgeBuilding extends TileEntity
 				buildTime =  upgradeTime(level + 1);
 				timeLeft = upgradeTime(level + 1);
 				level += 1;
-				if (this instanceof TileEntityScourgeResource)
+				if (this instanceof TileEntityGoldProducer)
 					((TileEntityScourgeResource)this).setGold(0);
 				return true;
 			}

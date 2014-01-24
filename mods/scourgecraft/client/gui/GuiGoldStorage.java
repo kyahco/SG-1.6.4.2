@@ -25,6 +25,8 @@ public class GuiGoldStorage extends GuiScreen {
 	int yCoord;
 	int zCoord;
 	
+	private GuiButton btnUpgradeLevel;
+	
 	public GuiGoldStorage(TileEntityGoldStorage par1TeGold, int x, int y, int z) {
 		teGold = par1TeGold;
 		xCoord = x;
@@ -35,6 +37,11 @@ public class GuiGoldStorage extends GuiScreen {
 	@Override 
 	public void initGui()
 	{
+		btnUpgradeLevel = (new GuiButton(1, this.width - 124, 60, 115, 20, "Upgrade Level " + (teGold.getLevel() + 1)));
+		btnUpgradeLevel.drawButton = false;
+		this.buttonList.add(btnUpgradeLevel);
+		
+		this.buttonList.add(new GuiButton(10, this.width - 50, 5, 45, 20, "Close"));
 	}
 	
 	@Override
@@ -57,7 +64,6 @@ public class GuiGoldStorage extends GuiScreen {
 				drawString(this.fontRenderer, "Level " + (teGold.getLevel() + 1), 10, 110, 0x66CC66);
 				drawString(this.fontRenderer, "Max Storage : " + (int)teGold.getMaxStorage(teGold.getLevel() + 1), 10, 120, 0x66CC66);
 				drawString(this.fontRenderer, "Upgrade Requirements", 10, 140, 0xFFCC00);
-				this.buttonList.add(new GuiButton(1, this.width - 124, 60, 115, 20, "Upgrade Level " + (teGold.getLevel() + 1)));
 			}
 			
 		}
@@ -66,7 +72,6 @@ public class GuiGoldStorage extends GuiScreen {
 			
 		}
 		
-		this.buttonList.add(new GuiButton(10, this.width - 50, 5, 45, 20, "Close"));
 		
 		super.drawScreen(x, y, f);
 	}

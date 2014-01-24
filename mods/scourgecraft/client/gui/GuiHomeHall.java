@@ -43,6 +43,9 @@ public class GuiHomeHall extends GuiScreen {
 	private int zCoord;
 	private TileEntityHomeHall tileHome;
 	
+	private GuiButton btnUpgradeLevel;
+	private GuiButton btnBuildHome;
+	
 	public GuiHomeHall(EntityPlayer player, TileEntityHomeHall tile, World par1World, int x, int y, int z) {
 		playerPar1 = player;
 		xCoord = x;
@@ -58,6 +61,15 @@ public class GuiHomeHall extends GuiScreen {
 		txtTownName = new GuiTextField(fontRenderer, 180 , this.height - 75, 100, 20);
 		txtTownName.setMaxStringLength(16);
 		extPlayer = ExtendedPlayer.getExtendedPlayer(playerPar1);
+		
+		btnUpgradeLevel = new GuiButton(1, this.width - 124, 60, 115, 20, "Upgrade Level " + (tileHome.getLevel() + 1));
+		btnUpgradeLevel.drawButton = false;
+		this.buttonList.add(btnUpgradeLevel);
+		btnBuildHome = new GuiButton(0, 195, this.height - 50, 65, 20, "Build");
+		btnBuildHome.drawButton = false;
+		this.buttonList.add(btnBuildHome);
+
+		this.buttonList.add(new GuiButton(10, this.width - 50, 5, 45, 20, "Close"));
 	}
 	
 	@Override
@@ -83,7 +95,7 @@ public class GuiHomeHall extends GuiScreen {
 				drawString(this.fontRenderer, "Max Gold Producers " + TileEntityGoldProducer.getTotalMaxByTownLevel(tileHome.getLevel() + 1), 10, 120, 0x66CC66);
 				drawString(this.fontRenderer, "Max Gold Storages " + TileEntityGoldStorage.getTotalMaxByTownLevel(tileHome.getLevel() + 1), 10, 130, 0x66CC66);
 				drawString(this.fontRenderer, "Upgrade Requirements", 10, 140, 0xFFCC00);
-				this.buttonList.add(new GuiButton(1, this.width - 124, 60, 115, 20, "Upgrade Level " + (tileHome.getLevel() + 1)));
+				btnUpgradeLevel.drawButton = true;
 			}
 		}
 		else if (OtherPlayerTownHall())
@@ -110,11 +122,10 @@ public class GuiHomeHall extends GuiScreen {
 			fontRenderer.drawString("Name Of your Home : ", 65, this.height - 69, 0xFFFFFF, false);
 		
 			txtTownName.drawTextBox();
-		
-			this.buttonList.add(new GuiButton(0, 195, this.height - 50, 65, 20, "Build"));
+			
+			btnBuildHome.drawButton = true;
 		}
 		
-		this.buttonList.add(new GuiButton(10, this.width - 50, 5, 45, 20, "Close"));
 		super.drawScreen(x, y, f);
 	}
 	
@@ -146,7 +157,7 @@ public class GuiHomeHall extends GuiScreen {
 		if (button.id == 0)
 		{
 			Home h = HomeManager.getHomeByPlayerName(playerPar1.username);
-			if (h != null)
+			if (h == null)
 			{
 				if (townName.length() < 4)
 				{

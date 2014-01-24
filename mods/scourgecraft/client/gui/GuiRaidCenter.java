@@ -24,6 +24,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiRaidCenter extends GuiScreen
 {
+	public static int MAX_LIST_DISPLAY_COUNT = 10;
 	private GuiTextField txtRaidName;
 	private String townName = "";
 	private EntityPlayer ePlayer;
@@ -34,6 +35,8 @@ public class GuiRaidCenter extends GuiScreen
 	private int ticks = 0;
 	List<Home> townList;
 	private int pageNumber = 0;
+	
+	private GuiButton[] btnAttackHome = new GuiButton[10];
 	
 	public GuiRaidCenter(EntityPlayer par1EntityPlayer, TileEntityRaidCenter par1Tile, int x, int y, int z) {
 		ePlayer = par1EntityPlayer;
@@ -48,7 +51,19 @@ public class GuiRaidCenter extends GuiScreen
 	{
 		txtRaidName = new GuiTextField(fontRenderer, this.width - 105, this.height - 25, 100, 20);
 		txtRaidName.setMaxStringLength(16);
-		townList = HomeManager.getHomesStartWith(townName, 10, pageNumber);
+		townList = HomeManager.getHomesStartWith(townName, MAX_LIST_DISPLAY_COUNT, pageNumber);
+		
+		for (int i = 0; i < MAX_LIST_DISPLAY_COUNT; i++)
+		{
+			btnAttackHome[i] = (new GuiButton(20 + i, 250, (i * 20) + 70 - 7, 65, 20, "Raid Town"));
+			btnAttackHome[i].drawButton = false;
+			this.buttonList.add(btnAttackHome[i]);
+		}
+		
+		this.buttonList.add(new GuiButton(8, 50, this.height - 25, 45, 20, "< Page"));
+		this.buttonList.add(new GuiButton(9, 100, this.height - 25, 45, 20, "Page >"));
+		
+		this.buttonList.add(new GuiButton(10, this.width - 50, 5, 45, 20, "Close"));
 	}
 	
 	@Override
@@ -63,7 +78,7 @@ public class GuiRaidCenter extends GuiScreen
 		
 		if (ticks % 20 == 0)
 		{
-			townList = HomeManager.getHomesStartWith(townName, 10, 0);
+			townList = HomeManager.getHomesStartWith(townName, MAX_LIST_DISPLAY_COUNT, 0);
 			ticks = 0;
 		}
 		drawString(this.fontRenderer, "Town Name", 10, 50, 0xFFFFFF);
@@ -75,14 +90,11 @@ public class GuiRaidCenter extends GuiScreen
 			drawString(this.fontRenderer, townList.get(i).name, 10, (i * 20) + 70, 0xFFCC00);
 			drawString(this.fontRenderer, townList.get(i).ownerUsername, 80, (i * 20) + 70, 0x66CC66);
 			drawString(this.fontRenderer, townList.get(i).level + "", 150, (i * 20) + 70, 0x66CC66);
-			this.buttonList.add(new GuiButton(20 + i, 250, (i * 20) + 70 - 7, 65, 20, "Raid Town"));
+			btnAttackHome[i].drawButton = true;
 		}
-		this.buttonList.add(new GuiButton(8, 50, this.height - 25, 45, 20, "< Page"));
-		this.buttonList.add(new GuiButton(9, 100, this.height - 25, 45, 20, "Page >"));
 		
 		txtRaidName.drawTextBox();
 		
-		this.buttonList.add(new GuiButton(10, this.width - 50, 5, 45, 20, "Close"));
 		super.drawScreen(x, y, f);
 	}
 	

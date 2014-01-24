@@ -27,6 +27,9 @@ public class GuiGoldProducer extends GuiScreen {
 	int yCoord;
 	int zCoord;
 	
+	private GuiButton btnCollect;
+	private GuiButton btnUpgradeLevel;
+	
 	public GuiGoldProducer(TileEntityGoldProducer par1TeGold, int x, int y, int z) {
 		teGold = par1TeGold;
 		xCoord = x;
@@ -37,6 +40,14 @@ public class GuiGoldProducer extends GuiScreen {
 	@Override 
 	public void initGui()
 	{
+		btnCollect = new GuiButton(0, this.width - 124, 38, 115, 20, "Collect Gold");
+		btnCollect.drawButton = false;
+		this.buttonList.add(btnCollect);
+		btnUpgradeLevel = new GuiButton(1, this.width - 124, 60, 115, 20, "Upgrade Level " + (teGold.getLevel() + 1));
+		btnUpgradeLevel.drawButton = false;
+		this.buttonList.add(btnUpgradeLevel);
+		
+		this.buttonList.add(new GuiButton(10, this.width - 50, 5, 45, 20, "Close"));
 	}
 	
 	@Override
@@ -54,7 +65,7 @@ public class GuiGoldProducer extends GuiScreen {
 			drawString(this.fontRenderer, "Gold Count : " + teGold.getGold(), 10, 60, 0x66CC66);
 			drawString(this.fontRenderer, "Max Storage : " + (int)teGold.getMaxStorage(), 10, 70, 0x66CC66);
 			drawString(this.fontRenderer, "Rate per/tick : " + teGold.getRate(), 10, 80, 0x66CC66);
-			this.buttonList.add(new GuiButton(0, this.width - 124, 38, 115, 20, "Collect Gold"));
+			btnCollect.drawButton = true;
 			if (teGold.hasNextLevel())
 			{
 				drawString(this.fontRenderer, "Next Level Stats", 10, 100, 0xFFCC00);
@@ -62,7 +73,7 @@ public class GuiGoldProducer extends GuiScreen {
 				drawString(this.fontRenderer, "Max Storage : " + (int)teGold.getMaxStorage(teGold.getLevel() + 1), 10, 120, 0x66CC66);
 				drawString(this.fontRenderer, "Rate per/tick : " + teGold.getRate(teGold.getLevel() + 1), 10, 130, 0x66CC66);
 				drawString(this.fontRenderer, "Upgrade Requirements", 10, 150, 0xFFCC00);
-				this.buttonList.add(new GuiButton(1, this.width - 124, 60, 115, 20, "Upgrade Level " + (teGold.getLevel() + 1)));
+				btnUpgradeLevel.drawButton = true;
 			}
 			
 		}
@@ -71,7 +82,6 @@ public class GuiGoldProducer extends GuiScreen {
 			
 		}
 		
-		this.buttonList.add(new GuiButton(10, this.width - 50, 5, 45, 20, "Close"));
 		
 		super.drawScreen(x, y, f);
 	}

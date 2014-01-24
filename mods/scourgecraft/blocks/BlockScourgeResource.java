@@ -6,6 +6,7 @@ import java.util.Random;
 import mods.scourgecraft.data.RaidManager;
 import mods.scourgecraft.helpers.Raid;
 import mods.scourgecraft.tileentity.TileEntityGoldProducer;
+import mods.scourgecraft.tileentity.TileEntityScourgeResource;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +31,7 @@ public class BlockScourgeResource  extends BlockContainer {
 	@Override
 	public void onBlockClicked(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer) 
 	{
-		TileEntityGoldProducer teGold = (TileEntityGoldProducer)par1World.getBlockTileEntity(par2, par3, par4);
+		TileEntityScourgeResource teGold = (TileEntityScourgeResource)par1World.getBlockTileEntity(par2, par3, par4);
 		
 		Raid r = RaidManager.getRaidByUsername(par5EntityPlayer.username);
 		

@@ -5,8 +5,8 @@ import java.io.DataOutputStream;
 import java.util.List;
 import java.util.logging.Level;
 
-import mods.scourgecraft.Home;
 import mods.scourgecraft.data.HomeManager;
+import mods.scourgecraft.helpers.Home;
 import mods.scourgecraft.network.packet.Packet5StartRaid;
 import mods.scourgecraft.tileentity.TileEntityRaidCenter;
 import net.minecraft.client.Minecraft;

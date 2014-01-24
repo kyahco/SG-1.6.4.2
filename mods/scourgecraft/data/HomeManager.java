@@ -12,8 +12,8 @@ import com.google.common.collect.Lists;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
-import mods.scourgecraft.Home;
 import mods.scourgecraft.ScourgeCraftCore;
+import mods.scourgecraft.helpers.Home;
 import mods.scourgecraft.network.packet.Packet1HomeInfo;
 import mods.scourgecraft.player.ExtendedPlayer;
 import mods.scourgecraft.tileentity.TileEntityGoldProducer;

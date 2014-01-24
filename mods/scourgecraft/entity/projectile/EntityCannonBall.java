@@ -1,7 +1,7 @@
 package mods.scourgecraft.entity.projectile;
 
-import mods.scourgecraft.WeaponDamageSource;
 import mods.scourgecraft.entity.EntityCannon;
+import mods.scourgecraft.helpers.WeaponDamageSource;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

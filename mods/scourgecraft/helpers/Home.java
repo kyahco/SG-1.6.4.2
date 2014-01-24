@@ -1,4 +1,4 @@
-package mods.scourgecraft;
+package mods.scourgecraft.helpers;
 
 public class Home {
 	public String ownerUsername;

@@ -6,8 +6,8 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.relauncher.Side;
-import mods.scourgecraft.Home;
 import mods.scourgecraft.ScourgeCraftCore;
+import mods.scourgecraft.helpers.Home;
 import mods.scourgecraft.network.ClientProxy;
 import mods.scourgecraft.network.ScourgePacket;
 import mods.scourgecraft.player.ExtendedPlayer;

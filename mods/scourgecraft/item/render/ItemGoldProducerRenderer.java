@@ -1,4 +1,4 @@
-package mods.scourgecraft.tileentity.render;
+package mods.scourgecraft.item.render;
 
 import org.lwjgl.opengl.GL11;
 
@@ -9,6 +9,7 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import mods.scourgecraft.tileentity.render.ModelGoldProducerRenderer;
+import mods.scourgecraft.tileentity.render.ModelResourceFile;
 
 public class ItemGoldProducerRenderer implements IItemRenderer {
 	

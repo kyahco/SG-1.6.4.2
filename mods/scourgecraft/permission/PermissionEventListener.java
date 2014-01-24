@@ -3,10 +3,10 @@ package mods.scourgecraft.permission;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import mods.scourgecraft.Home;
 import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.data.PermissionManager;
+import mods.scourgecraft.helpers.Home;
 import mods.scourgecraft.player.ExtendedPlayer;
 import mods.scourgecraft.tileentity.TileEntityGoldProducer;
 import mods.scourgecraft.tileentity.TileEntityHomeHall;

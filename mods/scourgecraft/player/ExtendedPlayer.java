@@ -2,10 +2,10 @@ package mods.scourgecraft.player;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
-import mods.scourgecraft.Home;
-import mods.scourgecraft.Raid;
 import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.data.PermissionManager;
+import mods.scourgecraft.helpers.Home;
+import mods.scourgecraft.helpers.Raid;
 import mods.scourgecraft.network.CommonProxy;
 import mods.scourgecraft.network.packet.Packet1HomeInfo;
 import mods.scourgecraft.network.packet.Packet3ExtendedInfo;

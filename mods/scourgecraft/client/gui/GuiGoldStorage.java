@@ -1,7 +1,7 @@
 package mods.scourgecraft.client.gui;
 
-import mods.scourgecraft.Home;
 import mods.scourgecraft.ScourgeCraftCore;
+import mods.scourgecraft.helpers.Home;
 import mods.scourgecraft.network.packet.Packet2CreateHome;
 import mods.scourgecraft.player.ExtendedPlayer;
 import mods.scourgecraft.tileentity.TileEntityGoldProducer;

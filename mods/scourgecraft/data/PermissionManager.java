@@ -2,7 +2,7 @@ package mods.scourgecraft.data;
 
 import java.util.HashMap;
 
-import mods.scourgecraft.Home;
+import mods.scourgecraft.helpers.Home;
 import mods.scourgecraft.player.ExtendedPlayer;
 import cpw.mods.fml.common.network.Player;
 

@@ -4,9 +4,9 @@ import java.util.EnumSet;
 
 import org.lwjgl.opengl.GL11;
 
-import mods.scourgecraft.Raid;
 import mods.scourgecraft.client.gui.GuiResourceFile;
 import mods.scourgecraft.data.RaidManager;
+import mods.scourgecraft.helpers.Raid;
 import mods.scourgecraft.player.ExtendedPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

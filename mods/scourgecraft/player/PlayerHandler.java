@@ -1,10 +1,10 @@
 package mods.scourgecraft.player;
 
 import cpw.mods.fml.common.IPlayerTracker;
-import mods.scourgecraft.Home;
 import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.data.RaidManager;
+import mods.scourgecraft.helpers.Home;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class PlayerHandler implements IPlayerTracker

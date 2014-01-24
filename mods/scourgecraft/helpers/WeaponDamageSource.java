@@ -1,4 +1,4 @@
-package mods.scourgecraft;
+package mods.scourgecraft.helpers;
 
 import mods.scourgecraft.entity.projectile.EntityProjectile;
 import net.minecraft.entity.Entity;

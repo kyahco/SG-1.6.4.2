@@ -12,11 +12,11 @@ import net.minecraftforge.client.model.IModelCustom;
 
 public class ModelGoldProducer extends TileEntitySpecialRenderer
 {
-	private IModelCustom myModelLevel1;
+	private ModelGoldProducerRenderer modelGoldProducer;
 	
 	public ModelGoldProducer()
 	{
-		myModelLevel1 = AdvancedModelLoader.loadModel("/assets/scourgecraft/textures/model/goldproducer.obj");
+		modelGoldProducer = new ModelGoldProducerRenderer();
 	}
 	
 	@Override
@@ -32,7 +32,7 @@ public class ModelGoldProducer extends TileEntitySpecialRenderer
         		case 1:
         		{
                     Minecraft.getMinecraft().renderEngine.bindTexture(ModelResourceFile.goldProducer1);
-                    myModelLevel1.renderAll();
+                    modelGoldProducer.render();
         			break;
         		}
         	}

@@ -8,14 +8,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
+import mods.scourgecraft.tileentity.render.ModelGoldProducerRenderer;
 
 public class ItemGoldProducerRenderer implements IItemRenderer {
 	
-	private IModelCustom myModelLevel1;
+	private ModelGoldProducerRenderer modelGoldProducer;
 		
-	public void ItemHomeHallRenderer()
+	public ItemGoldProducerRenderer()
 	{
-		myModelLevel1 = AdvancedModelLoader.loadModel("/assets/scourgecraft/textures/model/goldproducer.obj");
+		modelGoldProducer = new ModelGoldProducerRenderer();
 	}
 
 	@Override
@@ -32,16 +33,47 @@ public class ItemGoldProducerRenderer implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) 
+	{ 
+	        switch (type)
+	        {
+	            case ENTITY:
+	            {
+	                renderGoldProducer(0F, -0.5F, 0.0F, -0.5F);
+	                return;
+	            }
+	            case EQUIPPED:
+	            {
+	            	renderGoldProducer(270F, 0.7F, 0.2F, -0.3F);
+	            	return;
+
+	            }
+	            case EQUIPPED_FIRST_PERSON:
+	            {
+	                renderGoldProducer(270F, 0.7F, 0.3F, -0.0F);
+	                return;
+	            }
+	            case INVENTORY:
+	            {
+	                renderGoldProducer(0F, 0.0F, 0.1F, 0.0F);
+	                return;
+	            }
+	            default:
+	            {
+	            }
+	        }
+	}
+	
+	public void renderGoldProducer(float rot, float x, float y,float z)
 	{
-		 GL11.glPushMatrix();
-	        GL11.glDisable(GL11.GL_LIGHTING);
-	        
-	        GL11.glScalef(1.4F, 1.4F, 1.4F);
-	        GL11.glTranslatef(-1.0F, -1.675F, 0.0F);
-	        GL11.glRotatef(-90F, 1F, 0, 0);
+		GL11.glPushMatrix();
+        	GL11.glDisable(GL11.GL_LIGHTING);
+		
+			GL11.glScalef(1.1F, 1.1F, 1.1F);
+	        GL11.glTranslatef(x, y, z);
+	        GL11.glRotatef(rot, 0, 1F, 0);
 
 	        FMLClientHandler.instance().getClient().renderEngine.bindTexture(ModelResourceFile.goldProducer1);
-	        myModelLevel1.renderAll();
+	        modelGoldProducer.render();
 
 	        GL11.glEnable(GL11.GL_LIGHTING);
 	     GL11.glPopMatrix();

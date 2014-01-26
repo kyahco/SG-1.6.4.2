@@ -9,15 +9,13 @@ public class TileEntityGoldProducer extends TileEntityScourgeResource
 	
 	public TileEntityGoldProducer() {
 		super(BUILD_TIME);
-		
-		stealPercentage = 0.50;
 	}
 	
 
 	@Override
 	public void updateEntity()
 	{
-		if (isCompleted() && !raidActive)
+		if (isCompleted())
 		{
 			if (goldCount >= getMaxStorage())
 				goldCount = getMaxStorage();

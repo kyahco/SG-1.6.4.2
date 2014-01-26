@@ -107,7 +107,6 @@ public class TileEntityHomeHall extends TileEntityScourgeBuilding
 		return totalCount;
 	}
 	
-	//This should only be called from the TE of the HomeBlock
 	public List<TileEntityScourgeBuilding> getBuildingsByBlock(int blockId)
 	{
 		List<TileEntityScourgeBuilding> toReturn = Lists.newArrayList();
@@ -120,26 +119,6 @@ public class TileEntityHomeHall extends TileEntityScourgeBuilding
 				{
 					if (worldObj.getBlockId(x, y, z) == blockId)
 						toReturn.add((TileEntityScourgeBuilding)worldObj.getBlockTileEntity(x, y, z));
-				}
-			}
-		}
-		return toReturn;
-	}
-	
-	//This should only be called from the TE of the HomeBlock
-	public List<TileEntityScourgeResource> getAllScourgeResourceBuildings()
-	{
-		List<TileEntityScourgeResource> toReturn = Lists.newArrayList();
-		int widthOfHome = HomeManager.getHomeSize(level);
-		for (int x = xCoord - widthOfHome; x <= xCoord + widthOfHome; x++)
-		{
-			for (int y = yCoord - widthOfHome; y <= yCoord + widthOfHome; y++)
-			{
-				for (int z = zCoord - widthOfHome; z <= zCoord + widthOfHome; z++)
-				{
-					TileEntity te = worldObj.getBlockTileEntity(x, y , z);
-					if (te instanceof TileEntityScourgeResource)
-						toReturn.add((TileEntityScourgeResource)te);
 				}
 			}
 		}

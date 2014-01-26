@@ -2,10 +2,10 @@ package mods.scourgecraft.blocks;
 
 import java.util.Random;
 
+import mods.scourgecraft.Home;
 import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.data.PermissionManager;
-import mods.scourgecraft.helpers.Home;
 import mods.scourgecraft.tileentity.TileEntityGoldStorage;
 import mods.scourgecraft.tileentity.TileEntityHomeHall;
 import net.minecraft.block.BlockContainer;
@@ -17,11 +17,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
-public class BlockGoldStorage extends BlockScourgeResource {
+public class BlockGoldStorage extends BlockContainer {
 
 	public BlockGoldStorage(int par1, Material par2Material) {
 		super(par1, par2Material);
 		
+		setHardness(50.0F); 
 	}
 
 	@Override
@@ -81,5 +82,40 @@ public class BlockGoldStorage extends BlockScourgeResource {
 	        return true;
 	    }
 	}
+	
+	//You don't want the normal render type, or it wont render properly.
+    @Override
+    public int getRenderType() 
+    {
+            return -1;
+    }
+    
+    //It's not an opaque cube, so you need this.
+    @Override
+    public boolean isOpaqueCube() {
+            return false;
+    }
+   
+    //It's not a normal block, so you need this too.
+    public boolean renderAsNormalBlock() {
+            return false;
+    }
+	
+	@Override
+	public int quantityDropped(Random par1Random)
+    {
+        return 0;
+    }
+	
+	@Override
+	public boolean canDropFromExplosion(Explosion par1Explosion)
+	{
+		return false;
+	}
+	
+	public int getMobilityFlag()
+    {
+		return 2; //Do not allow to be moved by Pistons or such.
+    }
 
 }

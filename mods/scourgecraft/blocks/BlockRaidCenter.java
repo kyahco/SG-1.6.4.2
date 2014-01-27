@@ -56,20 +56,33 @@ public class BlockRaidCenter extends BlockContainer {
 	}
 	
 	@Override
-	public int quantityDropped(Random par1Random)
-    {
-        return 0;
-    }
-	
+    public int quantityDropped(Random par1Random)
+	{
+	    return 0;
+	}
+	    
 	@Override
 	public boolean canDropFromExplosion(Explosion par1Explosion)
 	{
 		return false;
 	}
 	
-	public int getMobilityFlag()
-    {
-		return 2; //Do not allow to be moved by Pistons or such.
-    }
+	//You don't want the normal render type, or it wont render properly.
+	@Override
+	public int getRenderType()
+	{
+	    return -1;
+	}
+	
+	//It's not an opaque cube, so you need this.
+	@Override
+	public boolean isOpaqueCube() {
+	    return false;
+	}
+	
+	//It's not a normal block, so you need this too.
+	public boolean renderAsNormalBlock() {
+	    return false;
+	}
 
 }

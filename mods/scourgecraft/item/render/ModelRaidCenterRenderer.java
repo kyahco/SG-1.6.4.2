@@ -1,9 +1,9 @@
-package mods.scourgecraft.tileentity.render;
+package mods.scourgecraft.item.render;
 
 import org.lwjgl.opengl.GL11;
 
+import mods.scourgecraft.tileentity.render.ModelResourceFile;
 import net.minecraft.client.Minecraft;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
@@ -17,7 +17,7 @@ public class ModelRaidCenterRenderer
 
     public ModelRaidCenterRenderer()
     {
-        modelRaidCenter = AdvancedModelLoader.loadModel("/assets/scourgecraft/textures/model/raidtable.obj");
+        modelRaidCenter = AdvancedModelLoader.loadModel("/assets/scourgecraft/textures/model/raidcenter.obj");
     }
 
     public void render()

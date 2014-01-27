@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
-import mods.scourgecraft.tileentity.render.ModelGoldProducerRenderer;
 import mods.scourgecraft.tileentity.render.ModelResourceFile;
 
 public class ItemGoldProducerRenderer implements IItemRenderer {
@@ -73,7 +72,6 @@ public class ItemGoldProducerRenderer implements IItemRenderer {
 	        GL11.glTranslatef(x, y, z);
 	        GL11.glRotatef(rot, 0, 1F, 0);
 
-	        FMLClientHandler.instance().getClient().renderEngine.bindTexture(ModelResourceFile.goldProducer1);
 	        modelGoldProducer.render();
 
 	        GL11.glEnable(GL11.GL_LIGHTING);

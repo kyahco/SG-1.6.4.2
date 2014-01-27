@@ -4,9 +4,10 @@ public class TileEntityGoldStorage extends TileEntityScourgeResource
 {	
 	public static final int BUILD_TIME = 1000;
 	
-	public TileEntityGoldStorage()
-	{
+	public TileEntityGoldStorage() {
 		super(BUILD_TIME);
+		
+		stealPercentage = 0.10;
 	}
 	
 	@Override
@@ -48,11 +49,11 @@ public class TileEntityGoldStorage extends TileEntityScourgeResource
 		return 0;
 	}
 	
-	public int storeGold(int amount)
+	public double storeGold(double amount)
 	{
 		if (amount + getGold() >= getMaxStorage())
 		{
-			int amountLeft = (int)getMaxStorage() - getGold();
+			double amountLeft = getMaxStorage() - getGold();
 			amountLeft = amount - amountLeft;
 			return amountLeft;
 		}

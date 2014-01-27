@@ -1,5 +1,6 @@
-package mods.scourgecraft.tileentity.render;
+package mods.scourgecraft.item.render;
 
+import mods.scourgecraft.tileentity.render.ModelResourceFile;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;

@@ -1,12 +1,12 @@
-package mods.scourgecraft.tileentity.render;
+package mods.scourgecraft.item.render;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 /**
- * Created by kyahco on 1/26/14.
- */
+* Created by kyahco on 1/26/14.
+*/
 public class ItemHomeHallRenderer implements IItemRenderer{
 
     private ModelHomeHallRenderer modelHomehall;

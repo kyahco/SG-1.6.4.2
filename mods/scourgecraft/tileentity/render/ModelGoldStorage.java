@@ -3,6 +3,7 @@ package mods.scourgecraft.tileentity.render;
 import org.lwjgl.opengl.GL11;
 
 import mods.scourgecraft.ScourgeCraftCore;
+import mods.scourgecraft.item.render.ModelGoldStorageRenderer;
 import mods.scourgecraft.tileentity.TileEntityGoldStorage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -20,7 +21,8 @@ public class ModelGoldStorage extends TileEntitySpecialRenderer
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
+			double z, float f) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
         if (tileentity instanceof TileEntityGoldStorage)
@@ -30,7 +32,8 @@ public class ModelGoldStorage extends TileEntitySpecialRenderer
         	{
         		case 1:
         		{
-                    myModelLevel1.render();
+        			myModelLevel1.render();
+        			break;
         		}
         	}
         }

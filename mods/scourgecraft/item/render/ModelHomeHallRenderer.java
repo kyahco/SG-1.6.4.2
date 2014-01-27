@@ -1,12 +1,16 @@
-package mods.scourgecraft.tileentity.render;
+package mods.scourgecraft.item.render;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mods.scourgecraft.tileentity.render.ModelResourceFile;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 
 /**
- * Created by kyahco on 1/26/14.
- */
+* Created by kyahco on 1/26/14.
+*/
+@SideOnly(Side.CLIENT)
 public class ModelHomeHallRenderer {
 
     private IModelCustom modelHomeHall;

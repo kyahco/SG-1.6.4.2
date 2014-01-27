@@ -1,9 +1,10 @@
-package mods.scourgecraft.tileentity.render;
+package mods.scourgecraft.item.render;
 
 import org.lwjgl.opengl.GL11;
 
 import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.tileentity.TileEntityGoldProducer;
+import mods.scourgecraft.tileentity.render.ModelResourceFile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;

@@ -3,6 +3,7 @@ package mods.scourgecraft.tileentity.render;
 import org.lwjgl.opengl.GL11;
 
 import mods.scourgecraft.ScourgeCraftCore;
+import mods.scourgecraft.item.render.ModelGoldProducerRenderer;
 import mods.scourgecraft.tileentity.TileEntityGoldProducer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -26,8 +27,8 @@ public class ModelGoldProducer extends TileEntitySpecialRenderer
         GL11.glTranslated(x, y, z);
         if (tileentity instanceof TileEntityGoldProducer)
         {
-        	TileEntityGoldProducer teHome = (TileEntityGoldProducer)tileentity;
-        	switch (teHome.getLevel())
+        	TileEntityGoldProducer teGold = (TileEntityGoldProducer)tileentity;
+        	switch (teGold.getLevel())
         	{
         		case 1:
         		{

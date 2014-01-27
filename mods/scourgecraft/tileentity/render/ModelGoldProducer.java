@@ -31,7 +31,6 @@ public class ModelGoldProducer extends TileEntitySpecialRenderer
         	{
         		case 1:
         		{
-                    Minecraft.getMinecraft().renderEngine.bindTexture(ModelResourceFile.goldProducer1);
                     modelGoldProducer.render();
         			break;
         		}

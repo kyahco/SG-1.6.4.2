@@ -10,11 +10,7 @@ import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.entity.EntityCannon;
 import mods.scourgecraft.player.ExtendedPlayer;
 import mods.scourgecraft.tick.ServerTickHandler;
-import mods.scourgecraft.tileentity.TileEntityCannon;
-import mods.scourgecraft.tileentity.TileEntityGoldProducer;
-import mods.scourgecraft.tileentity.TileEntityGoldStorage;
-import mods.scourgecraft.tileentity.TileEntityHomeHall;
-import mods.scourgecraft.tileentity.TileEntityScourgeBuilding;
+import mods.scourgecraft.tileentity.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -58,6 +54,7 @@ public class CommonProxy implements IGuiHandler {
     	GameRegistry.registerTileEntity(TileEntityGoldProducer.class, ScourgeCraftCore.modid + "TEGoldProducer");
     	GameRegistry.registerTileEntity(TileEntityGoldStorage.class, ScourgeCraftCore.modid + "TEGoldStorage");
     	GameRegistry.registerTileEntity(TileEntityCannon.class, ScourgeCraftCore.modid + "TECannon");
+        GameRegistry.registerTileEntity(TileEntityRaidCenter.class, ScourgeCraftCore.modid + "TERaidCenter");
     }
 	
 	public File getMinecraftDir()

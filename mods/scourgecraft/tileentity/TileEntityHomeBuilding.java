@@ -6,6 +6,7 @@ import java.util.Random;
 import com.google.common.collect.Lists;
 
 import mods.scourgecraft.ScourgeCraftCore;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -13,8 +14,11 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class TileEntityScourgeBuilding extends TileEntity 
+public class TileEntityHomeBuilding extends TileEntityScourgeBuilding 
 {
+
+	//This class is special, since the building occurs on Home blocks after someone claims it.
+	
 	public class BuildingTask
 	{
 		public int xCoord;
@@ -30,74 +34,55 @@ public class TileEntityScourgeBuilding extends TileEntity
 			blockId = block;
 		}
 	}
-
-	protected List<BuildingTask> buildingTasks = Lists.newArrayList();
 	
+	public static final String NBT_OWNER_NAME = "Owner";
 	public static final String NBT_BUILD_TIME = "BuildTime";
 	public static final String NBT_TIME_LEFT = "TimeLeft";
-	public static final String NBT_OWNER_NAME = "Owner";
-	public static final String NBT_LEVEL = "Level";
 	
+	private List<BuildingTask> buildingTasks = Lists.newArrayList();
 	private String owner;
-	protected int buildTime;
-	protected int timeLeft;
-	protected int delay;
-	protected int level;
+	private int buildTime;
+	private int timeLeft = 0;
+	private int delay;
 	protected boolean sentBuildCommands = false;
 	
-	public TileEntityScourgeBuilding(int par1BuildTime)
-	{
-		owner = "";
-		buildTime = par1BuildTime;
-		timeLeft = par1BuildTime;
-		level = 1;
+
+	public TileEntityHomeBuilding(int par1BuildTime) {
+		super(par1BuildTime);
+			buildTime = par1BuildTime;
+			owner = "";
 	}
 	
 	@Override
 	public void updateEntity()
 	{
-		if (timeLeft > 0)
+		if (sentBuildCommands)
 		{
-			timeLeft -= 1;
-			if (timeLeft % 60 == 0 && timeLeft != 0) // We don't want to run at 0, because we want the done sound to play.
-				worldObj.playSoundEffect((double)((float)xCoord + 0.5F), (double)((float)yCoord + 0.5F), (double)((float)zCoord + 0.5F), ScourgeCraftCore.modid.toLowerCase() + ":" + "construction", 2.0f, 2.0f);
-			else if (timeLeft == 0)
-				worldObj.playSoundEffect((double)((float)xCoord + 0.5F), (double)((float)yCoord + 0.5F), (double)((float)zCoord + 0.5F), ScourgeCraftCore.modid.toLowerCase() + ":" + "constructiondone", 2.0f, 2.0f);
-		}
-		else 
-			timeLeft = 0;
-	}
-	
-	public boolean upgrade()
-	{
-		if (hasNextLevel())
-		{
-			//Consume Stuff here
+			if (buildingTasks.size() > 0)
 			{
-				buildTime =  upgradeTime(level + 1);
-				timeLeft = upgradeTime(level + 1);
-				level += 1;
-				if (this instanceof TileEntityScourgeResource)
-					((TileEntityScourgeResource)this).setGold(0);
-				return true;
+				if (timeLeft % delay == 0)
+				{
+					BuildingTask task = buildingTasks.remove(0);
+					worldObj.setBlock(task.xCoord, task.yCoord, task.zCoord, task.blockId);
+				}
+			}
+			if (timeLeft > 0)
+				timeLeft -= 1;
+			else 
+			{
+				timeLeft = 0;
+				for (BuildingTask t : buildingTasks)
+				{
+					worldObj.setBlock(t.xCoord, t.yCoord, t.zCoord, t.blockId);
+				}
+				buildingTasks.clear();
 			}
 		}
-		return false;
-	}
-	
-	public boolean hasNextLevel()
-	{ 
-		return false;
 	}
 	
 	public boolean isCompleted()
 	{
 		return timeLeft == 0;
-	}
-	
-	public int upgradeTime(int level)
-	{
-		return 0;
 	}
 	
 	public int percentCompleted()
@@ -112,7 +97,6 @@ public class TileEntityScourgeBuilding extends TileEntity
 			owner = nbt.getString(NBT_OWNER_NAME);
 		buildTime = nbt.getInteger(NBT_BUILD_TIME);
 		timeLeft = nbt.getInteger(NBT_TIME_LEFT);
-		level = nbt.getInteger(NBT_LEVEL);
 	}
 	
 	public void writeToNBT(NBTTagCompound nbt)
@@ -122,10 +106,8 @@ public class TileEntityScourgeBuilding extends TileEntity
 			nbt.setString(NBT_OWNER_NAME, owner);
 		nbt.setInteger(NBT_BUILD_TIME, buildTime);
 		nbt.setInteger(NBT_TIME_LEFT, timeLeft);
-		nbt.setInteger(NBT_LEVEL, level);
 	}
 	
-
 	public String getOwner()
 	{
 		return owner;
@@ -136,10 +118,19 @@ public class TileEntityScourgeBuilding extends TileEntity
 		owner = par1Owner;
 	}
 	
-	public int getLevel()
+	@Override
+	public boolean canUpdate()
 	{
-		return level;
+		if (isCompleted() && sentBuildCommands)
+			return false;
+		return true;
 	}
+	
+	protected void addBuildingTask(BuildingTask task)
+	{
+		buildingTasks.add(task);
+	}
+	
 	
 	@Override
 	public Packet getDescriptionPacket()
@@ -154,7 +145,6 @@ public class TileEntityScourgeBuilding extends TileEntity
 	{
 		this.readFromNBT(pkt.data);
 	}
-	
 	
 	public void build()
 	{

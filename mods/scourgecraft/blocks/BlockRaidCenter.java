@@ -2,10 +2,10 @@ package mods.scourgecraft.blocks;
 
 import java.util.Random;
 
+import mods.scourgecraft.Home;
 import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.data.HomeManager;
 import mods.scourgecraft.data.PermissionManager;
-import mods.scourgecraft.helpers.Home;
 import mods.scourgecraft.tileentity.TileEntityGoldProducer;
 import mods.scourgecraft.tileentity.TileEntityHomeHall;
 import mods.scourgecraft.tileentity.TileEntityRaidCenter;
@@ -23,7 +23,7 @@ public class BlockRaidCenter extends BlockContainer {
 	public BlockRaidCenter(int par1, Material par2Material) {
 		super(par1, par2Material);
 		
-		setBlockUnbreakable();
+		setHardness(50.0F); 
 	}
 
 	@Override
@@ -66,10 +66,23 @@ public class BlockRaidCenter extends BlockContainer {
 	{
 		return false;
 	}
-	
-	public int getMobilityFlag()
+
+    //You don't want the normal render type, or it wont render properly.
+    @Override
+    public int getRenderType()
     {
-		return 2; //Do not allow to be moved by Pistons or such.
+        return -1;
+    }
+
+    //It's not an opaque cube, so you need this.
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    //It's not a normal block, so you need this too.
+    public boolean renderAsNormalBlock() {
+        return false;
     }
 
 }

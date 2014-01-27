@@ -12,16 +12,15 @@ import net.minecraftforge.client.model.IModelCustom;
 
 public class ModelGoldStorage extends TileEntitySpecialRenderer
 {
-	private IModelCustom myModelLevel1;
+	private ModelGoldStorageRenderer myModelLevel1;
 	
 	public ModelGoldStorage()
 	{
-		myModelLevel1 = AdvancedModelLoader.loadModel("/assets/scourgecraft/textures/model/goldstorage.obj");
+		myModelLevel1 = new ModelGoldStorageRenderer();
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
-			double z, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
         if (tileentity instanceof TileEntityGoldStorage)
@@ -31,9 +30,7 @@ public class ModelGoldStorage extends TileEntitySpecialRenderer
         	{
         		case 1:
         		{
-                    Minecraft.getMinecraft().renderEngine.bindTexture(ModelResourceFile.goldStorage1);
-                    myModelLevel1.renderAll();
-        			break;
+                    myModelLevel1.render();
         		}
         	}
         }

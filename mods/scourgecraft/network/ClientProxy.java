@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 
+import mods.scourgecraft.tileentity.render.ModelDefenseCannon;
+import mods.scourgecraft.tileentity.TileEntityDefenseCannon;
 import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.blocks.BlockGoldProducer;
 import mods.scourgecraft.config.ConfigBlocks;
@@ -59,6 +61,7 @@ public class ClientProxy extends CommonProxy
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldStorage.class, new ModelGoldStorage());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldProducer.class, new ModelGoldProducer());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRaidCenter.class, new ModelRaidCenter());
+            ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDefenseCannon.class, new ModelDefenseCannon());
             
             RenderingRegistry.registerEntityRenderingHandler(EntityCannon.class, new RenderCannon());
             RenderingRegistry.registerEntityRenderingHandler(EntityCannonBall.class, new RenderCannonBall());

@@ -16,7 +16,7 @@ public class ModelDefenseCannonRenderer {
 
     public ModelDefenseCannonRenderer()
     {
-        modelDefenseCannon = AdvancedModelLoader.loadModel("/assets/scourgecraft/textures/model/Cannon.obj");
+        modelDefenseCannon = AdvancedModelLoader.loadModel("/assets/scourgecraft/textures/model/cannon.obj");
     }
     
     //renders just the stand and the cannon so the base does not rotate.

@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import mods.scourgecraft.tileentity.TileEntityDefenseCannon;
 import mods.scourgecraft.ScourgeCraftCore;
 import mods.scourgecraft.entity.EntityCannon;
 import mods.scourgecraft.player.ExtendedPlayer;
@@ -58,6 +59,7 @@ public class CommonProxy implements IGuiHandler {
     	GameRegistry.registerTileEntity(TileEntityGoldProducer.class, ScourgeCraftCore.modid + "TEGoldProducer");
     	GameRegistry.registerTileEntity(TileEntityGoldStorage.class, ScourgeCraftCore.modid + "TEGoldStorage");
     	GameRegistry.registerTileEntity(TileEntityCannon.class, ScourgeCraftCore.modid + "TECannon");
+    	GameRegistry.registerTileEntity(TileEntityDefenseCannon.class, ScourgeCraftCore.modid + "TEDCAnnon");
     }
 	
 	public File getMinecraftDir()
